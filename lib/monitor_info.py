@@ -19,7 +19,7 @@ BLOCKS_PER_MONTH = 4032.0 # 1008 * 4
 
 
 class Info:
-   last_status_time = datetime.now()
+   timestamp = round(datetime.timestamp(datetime.now()))
    blocks = None
    headers = None
    difficulty = None
@@ -80,25 +80,31 @@ def get_block_time(block_height):
 
 
 def get_most_recent_info():
-   return None
-   """
    connection = sqlite3.connect("bitcoin.db")
    cursor = connection.cursor()
    
-   cursor.execute("SELECT * FROM status_info ORDER BY date ASC limit 1")
+   cursor.execute("SELECT timestamp, blocks, difficulty, network_hash_rate, price FROM status_info ORDER BY timestamp DESC limit 1")
    result = cursor.fetchone()
-   """
+   
+   if result == None:
+      return None
+   
+   info = Info()
+   info.timestamp = result[0]
+   info.blocks = result[1]
+   info.difficulty = result[2]
+   info.network_hash_rate = result[3]
+   info.price = result[4]
+   return info
 
 
 def write_info(info):
-   """
    connection = sqlite3.connect("bitcoin.db")
    cursor = connection.cursor()
-   
-   sql_command = "INSERT INTO status_info (date)\nVALUES (\"{}\", {}, {}, {}, {}, {}, {}, {});".format()
+
+   sql_command = "INSERT INTO status_info (timestamp, blocks, difficulty, network_hash_rate, price)\nVALUES ({}, {}, {}, {}, {});".format(info.timestamp, info.blocks, info.difficulty, info.network_hash_rate, info.price)
+   print(sql_command)
    cursor.execute(sql_command)
 
    connection.commit()
    connection.close()
-   """
-

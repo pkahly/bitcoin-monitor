@@ -191,6 +191,8 @@ def run_bitcoin_alerter():
 
 ############################################################################
 
+run_bitcoin_alerter()
+"""
 error_sleep = INITIAL_ERROR_SLEEP
 while True:
    try:
@@ -201,3 +203,4 @@ while True:
 
    time.sleep(error_sleep)
    error_sleep *= 2
+   """
