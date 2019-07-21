@@ -46,7 +46,7 @@ def send_email(subject, message):
 
    # Send email
    email_text = "Subject: {} {}\n\n{}".format(subject, dt.strftime("%m-%d"), message)
-   #server.sendmail(BOT_EMAIL, HUMAN_EMAIL, email_text)
+   server.sendmail(BOT_EMAIL, HUMAN_EMAIL, email_text)
 
    print("\n\n###################################\n")
    print(email_text)
@@ -191,8 +191,6 @@ def run_bitcoin_alerter():
 
 ############################################################################
 
-run_bitcoin_alerter()
-"""
 error_sleep = INITIAL_ERROR_SLEEP
 while True:
    try:
@@ -203,4 +201,3 @@ while True:
 
    time.sleep(error_sleep)
    error_sleep *= 2
-   """
