@@ -5,9 +5,9 @@ import math
 from datetime import datetime
 from lib import price_history
 
-FILENAME = 'daily_history.csv'
+FILENAME = '../daily_history.csv'
 
-connection = sqlite3.connect("bitcoin.db")
+connection = sqlite3.connect("../bitcoin.db")
 cursor = connection.cursor()
 
 with open(FILENAME, 'r') as file:

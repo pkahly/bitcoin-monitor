@@ -7,7 +7,7 @@ import time
 connection = sqlite3.connect("../bitcoin.db")
 cursor = connection.cursor()
 
-cursor.execute("SELECT * FROM historical_prices ORDER BY date ASC")
+cursor.execute("SELECT * FROM status_info ORDER BY timestamp DESC")
 
 result = cursor.fetchone()
 while result != None:
