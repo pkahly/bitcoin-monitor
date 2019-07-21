@@ -147,7 +147,7 @@ def write_history_stats(statuses, alerts, previous_info, info):
 ## Main Loop ##
 def run_bitcoin_alerter():
    previous_info = monitor_info.get_most_recent_info()
-   last_run = previous_info.last_status_time.strftime("%m-%d %H:%M")
+   last_run = datetime.now().strftime("%m-%d %H:%M")#previous_info.last_status_time.strftime("%m-%d %H:%M")
       
    #send_email("Bitcoin Monitor Online", "Bitcoin Monitor has just started. Last status email was at {}\n".format(last_run))
 
@@ -177,7 +177,7 @@ def run_bitcoin_alerter():
       elif previous_info == None or (datetime.now() - previous_info.last_status_time) > timedelta(hours=STATUS_FREQUENCY_IN_HOURS):
          send_email("Bitcoin Status Update", status_string)
          previous_info = info
-         pickle.dump(info, open(PICKLE_FILE, "wb"))
+         monitor_info.write_info(info)
       else:
          td = timedelta(hours=STATUS_FREQUENCY_IN_HOURS) - (datetime.now() - previous_info.last_status_time)
          hours, remainder = divmod(td.seconds, 3600)
@@ -191,8 +191,6 @@ def run_bitcoin_alerter():
 
 ############################################################################
 
-run_bitcoin_alerter()
-"""
 error_sleep = INITIAL_ERROR_SLEEP
 while True:
    try:
@@ -203,4 +201,3 @@ while True:
 
    time.sleep(error_sleep)
    error_sleep *= 2
-"""

@@ -19,8 +19,21 @@ BLOCKS_PER_MONTH = 4032.0 # 1008 * 4
 
 
 class Info:
+   last_status_time = datetime.now()
    blocks = None
    headers = None
+   difficulty = None
+   network_hash_rate = None
+   month_ago_block_time = None
+   week_ago_block_time = None
+   day_ago_block_time = None
+   last_block_time = None
+   block_time_delta = None
+   price = None
+   reward = None
+   total_coins = None
+   blocks_till_halving = None
+   days_till_halving = None
    price_alert_enabled = True
 
 
@@ -67,14 +80,18 @@ def get_block_time(block_height):
 
 
 def get_most_recent_info():
+   return None
+   """
    connection = sqlite3.connect("bitcoin.db")
    cursor = connection.cursor()
    
    cursor.execute("SELECT * FROM status_info ORDER BY date ASC limit 1")
    result = cursor.fetchone()
+   """
 
 
 def write_info(info):
+   """
    connection = sqlite3.connect("bitcoin.db")
    cursor = connection.cursor()
    
@@ -83,3 +100,5 @@ def write_info(info):
 
    connection.commit()
    connection.close()
+   """
+
