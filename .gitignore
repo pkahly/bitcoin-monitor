@@ -1,0 +1,4 @@
+bitcoin.db
+config.json
+daily_history.csv
+lib/__pycache__

@@ -1,0 +1,13 @@
+1) Run a full Bitcoin node (find instructions elsewhere)
+
+2) Run install.py to create a new sqllite3 database
+   Can run uninstall.py to drop the database tables and allow rerunning install.py
+
+3) Run import_data.py to import historical price data 
+   daily_history.csv must exist in the correct format
+
+4) Run add_blocks.py to save block hashes for reorg detection
+
+5) Run full_node_monitor.py
+   This is the main loop
+   This will create a pickle.out file to save state and read the database tables created earlier
