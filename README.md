@@ -26,28 +26,30 @@
 	2014-07-21 :    $622.21    1599.19 %
 
 
-Instructions:
+### Instructions:
 
-1) Run a full Bitcoin node (find instructions elsewhere)
+- Run a full Bitcoin node (find instructions elsewhere)
 
-2) Run install/install.py to create a new sqllite3 database
+- Run install/install.py to create a new sqllite3 database
    Can run install/uninstall.py to drop the database tables and allow rerunning install/install.py
 
-3) Run install/add_price_data.py to import historical price data 
+- Run install/add_price_data.py to import historical price data 
    daily_history.csv must exist in the root directory in the correct format
 
-4) Run install/add_blocks.py to save block hashes for reorg detection
+- Run install/add_blocks.py to save block hashes for reorg detection
    This is optional as full_node_monitor.py will do the same thing during it's first run
 
-5) Create config.json. Format:
-   {
-   "SERVER": <server>,
-   "PORT": <port>,
-   "BOT_EMAIL": <email>,
-   "BOT_PASSWORD": <pass>,
-   "HUMAN_EMAIL": <your email>
-   }
+- Create config.json. Format:
+```
+{
+"SERVER": <server>,
+"PORT": <port>,
+"BOT_EMAIL": <email>,
+"BOT_PASSWORD": <pass>,
+"HUMAN_EMAIL": <your email>
+}
+```
 
-6) Run full_node_monitor.py
+- Run full_node_monitor.py
    This is the main loop
    This will read and write the database tables created earlier
