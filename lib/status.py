@@ -3,7 +3,7 @@ import subprocess
 import requests
 import os
 from datetime import datetime, timedelta
-from lib import reorg, price_history, alerts
+from lib import price_history
 
 
 BLOCKS_PER_DAY = 144.0 # 6 per hour * 24 hours per day
@@ -57,11 +57,4 @@ def get_status(previous_info, info):
 
    connection.close()
    
-   alert_list = alerts.get_alerts(previous_info, info)
-   
-   status_string = "\n".join(statuses)
-   has_alerts = len(alert_list) > 0
-   alert_string = "\n".join(alert_list) + "\n\n" + status_string
-   
-   return (status_string, has_alerts, alert_string)
-   
+   return "\n".join(statuses)   

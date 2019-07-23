@@ -20,7 +20,7 @@ def send_email(subject, message):
 
    # Send email
    email_text = "Subject: {} {}\n\n{}".format(subject, dt.strftime("%m-%d"), message)
-   #server.sendmail(BOT_EMAIL, HUMAN_EMAIL, email_text) # TODO uncomment
+   server.sendmail(BOT_EMAIL, HUMAN_EMAIL, email_text)
 
    print("\n\n###################################\n")
    print(email_text)

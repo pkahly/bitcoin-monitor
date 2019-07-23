@@ -8,14 +8,14 @@ import json
 import requests
 import os
 from datetime import datetime, timedelta
-from lib import reorg, price_history, info_collector, email, status
+from lib import reorg, price_history, info_collector, email, status, alerts
 
 
 # Configuration
 MINUTES_TO_SLEEP = 5
 SECONDS_TO_SLEEP = MINUTES_TO_SLEEP * 60
 INITIAL_ERROR_SLEEP = SECONDS_TO_SLEEP
-STATUS_FREQUENCY_IN_HOURS = 0#4 #TODO uncomment
+STATUS_FREQUENCY_IN_HOURS = 4
 
 
 def run_bitcoin_alerter():
@@ -27,13 +27,13 @@ def run_bitcoin_alerter():
    while True:
       info = info_collector.get_info(previous_info)
       
-      results = status.get_status(previous_info, info)
-      status_string = results[0]
-      has_alerts = results[1]
-      alert_string = results[2]
-
+      status_string = status.get_status(previous_info, info)
+      alert_list = alerts.get_alerts(previous_info, info)
+   
+      alert_string = "\n".join(alert_list) + "\n\n" + status_string
+   
       # Send Status Email
-      if has_alerts:
+      if len(alert_list) > 0:
          email.send_email("Bitcoin ALERT", alert_string);
       elif previous_info == None or (datetime.now() - previous_info.last_status_time) > timedelta(hours=STATUS_FREQUENCY_IN_HOURS):
          email.send_email("Bitcoin Status Update", status_string)
@@ -53,10 +53,6 @@ def run_bitcoin_alerter():
 ############################################################################
 
 
-run_bitcoin_alerter()
-
-# TODO uncomment
-""" 
 error_sleep = INITIAL_ERROR_SLEEP
 while True:
    try:
@@ -67,4 +63,3 @@ while True:
 
    time.sleep(error_sleep)
    error_sleep *= 2
-"""
