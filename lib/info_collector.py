@@ -41,19 +41,39 @@ def get_info(previous_info):
    info = Info()
    info.last_status_time = datetime.now()
    
-   block_info = json.loads(subprocess.check_output(['bitcoin-cli','getblockchaininfo']))
-   info.blocks = block_info["blocks"]
-   info.headers = block_info["headers"]
+   info.blocks = json.loads(subprocess.check_output(['bitcoin-cli','getblockcount']))
+   info.new_blocks = 0
+   
+   if previous_info != None:
+      info.new_blocks = info.blocks - previous_info.blocks
    
    mining_info = json.loads(subprocess.check_output(['bitcoin-cli','getmininginfo']))
    info.difficulty = mining_info["difficulty"]
    info.network_hash_rate = mining_info["networkhashps"]
    
-   info.month_ago_block_time = get_block_time(round(info.blocks - BLOCKS_PER_MONTH))      
-   info.week_ago_block_time = get_block_time(round(info.blocks - BLOCKS_PER_WEEK))
-   info.day_ago_block_time = get_block_time(round(info.blocks - BLOCKS_PER_DAY))
+   info.difficulty_percent_change = 0
+   info.hash_rate_percent_change = 0
+   if previous_info != None:
+      info.difficulty_percent_change = price_history.percent_change(previous_info.difficulty, info.difficulty)
+      info.hash_rate_percent_change = price_history.percent_change(previous_info.network_hash_rate, info.network_hash_rate)
+   
+   month_ago_block_time = get_block_time(round(info.blocks - BLOCKS_PER_MONTH))      
+   week_ago_block_time = get_block_time(round(info.blocks - BLOCKS_PER_WEEK))
+   day_ago_block_time = get_block_time(round(info.blocks - BLOCKS_PER_DAY))
    info.last_block_time = get_block_time(info.blocks)
-   info.block_time_delta = datetime.now() - info.last_block_time
+      
+   info.daily_avg = (info.last_block_time - day_ago_block_time).total_seconds() / BLOCKS_PER_DAY / 60
+   info.weekly_avg = (info.last_block_time - week_ago_block_time).total_seconds() / BLOCKS_PER_WEEK / 60
+   info.monthly_avg = (info.last_block_time - month_ago_block_time).total_seconds() / BLOCKS_PER_MONTH / 60
+   
+   block_time_delta = datetime.now() - info.last_block_time
+   info.num_minutes = round(block_time_delta.total_seconds() / 60)
+   
+   reorg_info = reorg.add_blocks()
+   highest_stored_block = reorg_info["highest_stored_block"]
+   last_matching_height = reorg_info["last_matching_height"]
+   
+   info.reorg_length = highest_stored_block - last_matching_height
 
    priceResponse = requests.get("https://api.cryptowat.ch/markets/gdax/btcusd/price")
    info.price = priceResponse.json()['result']['price']

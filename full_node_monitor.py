@@ -8,25 +8,24 @@ import json
 import requests
 import os
 from datetime import datetime, timedelta
-from lib import reorg, price_history, monitor_info, email, status
+from lib import reorg, price_history, info_collector, email, status
 
 
 # Configuration
 MINUTES_TO_SLEEP = 5
 SECONDS_TO_SLEEP = MINUTES_TO_SLEEP * 60
 INITIAL_ERROR_SLEEP = SECONDS_TO_SLEEP
-STATUS_FREQUENCY_IN_HOURS = 4
+STATUS_FREQUENCY_IN_HOURS = 0#4 #TODO uncomment
 
 
-## Main Loop ##
 def run_bitcoin_alerter():
-   previous_info = monitor_info.get_most_recent_info()
+   previous_info = info_collector.get_most_recent_info()
    last_run = previous_info.last_status_time.strftime("%m-%d %I:%M %p")
       
    #email.send_email("Bitcoin Monitor Online", "Bitcoin Monitor has just started. Last status email was at {}\n".format(last_run))
 
    while True:
-      info = monitor_info.get_info(previous_info)
+      info = info_collector.get_info(previous_info)
       
       results = status.get_status(previous_info, info)
       status_string = results[0]
@@ -39,7 +38,7 @@ def run_bitcoin_alerter():
       elif previous_info == None or (datetime.now() - previous_info.last_status_time) > timedelta(hours=STATUS_FREQUENCY_IN_HOURS):
          email.send_email("Bitcoin Status Update", status_string)
          previous_info = info
-         monitor_info.write_info(info)
+         info_collector.write_info(info)
       else:
          td = timedelta(hours=STATUS_FREQUENCY_IN_HOURS) - (datetime.now() - previous_info.last_status_time)
          hours, remainder = divmod(td.seconds, 3600)
@@ -53,6 +52,11 @@ def run_bitcoin_alerter():
 
 ############################################################################
 
+
+run_bitcoin_alerter()
+
+# TODO uncomment
+""" 
 error_sleep = INITIAL_ERROR_SLEEP
 while True:
    try:
@@ -63,3 +67,4 @@ while True:
 
    time.sleep(error_sleep)
    error_sleep *= 2
+"""

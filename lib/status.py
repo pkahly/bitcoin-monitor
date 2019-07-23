@@ -3,7 +3,7 @@ import subprocess
 import requests
 import os
 from datetime import datetime, timedelta
-from lib import reorg, price_history, monitor_info
+from lib import reorg, price_history
 
 
 BLOCK_REORG_THRESHOLD = 0
@@ -16,53 +16,29 @@ BLOCKS_PER_MONTH = 4032.0 # 1008 * 4
 
 
 def write_block_stats(statuses, alerts, previous_info, info):
-   new_blocks = 0
-   if previous_info != None:
-      new_blocks = info.blocks - previous_info.blocks
-
-   statuses.append("Blocks: {:,} ( + {} )".format(info.blocks, new_blocks))
+   statuses.append("Blocks: {:,} ( + {} )".format(info.blocks, info.new_blocks))
    statuses.append("Last Block Time: {}".format(info.last_block_time.strftime("%m-%d %I:%M %p")))
+   statuses.append("Minutes Since Last Block: {}".format(info.num_minutes))
 
-   if info.blocks < info.headers:
-      statuses.append("Headers: {} - Blocks Behind: {}".format(info.headers, (info.headers - info.blocks)))
-
-   num_minutes = round(info.block_time_delta.total_seconds() / 60)
-   if info.block_time_delta > timedelta(minutes=MINUTES_BETWEEN_BLOCKS_THRESHOLD):
-      alerts.append("WARNING: No blocks in {} minutes".format(num_minutes))
-   else:
-      statuses.append("Minutes Since Last Block: {}".format(num_minutes))
+   if info.num_minutes > MINUTES_BETWEEN_BLOCKS_THRESHOLD:
+      alerts.append("WARNING: No blocks in {} minutes".format(info.num_minutes))
       
       
 def write_difficulty_stats(statuses, alerts, previous_info, info):
-   difficulty_percent_change = 0
-   hash_rate_percent_change = 0
-   if previous_info != None:
-      difficulty_percent_change = price_history.percent_change(previous_info.difficulty, info.difficulty)
-      hash_rate_percent_change = price_history.percent_change(previous_info.network_hash_rate, info.network_hash_rate)
-       
    statuses.append("Difficulty: {}".format(info.difficulty))
-   statuses.append("Network Hash Rate: {} ( {:.2f} % )".format(info.network_hash_rate, hash_rate_percent_change))
+   statuses.append("Network Hash Rate: {} ( {:.2f} % )".format(info.network_hash_rate, info.hash_rate_percent_change))
    
-   if difficulty_percent_change > 0:
-      alerts.append("Difficulty Adjustment Occurred! Old: {} New: {} Change: {:.2f} %".format(previous_info.difficulty, info.difficulty, difficulty_percent_change))
+   if info.difficulty_percent_change > 0:
+      alerts.append("Difficulty Adjustment Occurred! Old: {} New: {} Change: {:.2f} %".format(previous_info.difficulty, info.difficulty, info.difficulty_percent_change))
       
-   daily_avg = (info.last_block_time - info.day_ago_block_time).total_seconds() / BLOCKS_PER_DAY / 60
-   weekly_avg = (info.last_block_time - info.week_ago_block_time).total_seconds() / BLOCKS_PER_WEEK / 60
-   monthly_avg = (info.last_block_time - info.month_ago_block_time).total_seconds() / BLOCKS_PER_MONTH / 60
-   statuses.append("Average time between blocks in last day: {:.2f} min".format(daily_avg))
-   statuses.append("Average time between blocks in last week: {:.2f} min".format(weekly_avg))
-   statuses.append("Average time between blocks in last month: {:.2f} min".format(monthly_avg))
+   statuses.append("Average time between blocks in last day: {:.2f} min".format(info.daily_avg))
+   statuses.append("Average time between blocks in last week: {:.2f} min".format(info.weekly_avg))
+   statuses.append("Average time between blocks in last month: {:.2f} min".format(info.monthly_avg))
 
    
 def write_reorg_stats(statuses, alerts, previous_info, info):
-   reorg_info = reorg.add_blocks()
-   highest_stored_block = reorg_info["highest_stored_block"]
-   last_matching_height = reorg_info["last_matching_height"]
-   
-   reorg_length = highest_stored_block - last_matching_height
-
-   if reorg_length > BLOCK_REORG_THRESHOLD:
-      alerts.append("WARNING: Block Reorg of {} blocks has occurred".format(reorg_length))
+   if info.reorg_length > BLOCK_REORG_THRESHOLD:
+      alerts.append("WARNING: Block Reorg of {} blocks has occurred".format(info.reorg_length))
 
 
 def write_halving_stats(statuses, alerts, previous_info, info):  
