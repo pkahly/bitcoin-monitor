@@ -1,16 +1,14 @@
 #!/usr/bin/python3
 
 
-import smtplib
 import sqlite3
 import subprocess
-import pickle
 import time
 import json
 import requests
 import os
 from datetime import datetime, timedelta
-from lib import reorg, price_history, monitor_info
+from lib import reorg, price_history, monitor_info, email
 
 
 # Configuration
@@ -23,37 +21,9 @@ BLOCK_REORG_THRESHOLD = 0
 MINUTES_BETWEEN_BLOCKS_THRESHOLD = 90
 PRICE_PERCENT_CHANGE_THRESHOLD = 10
 
-with open('config.json') as json_file:
-   config = json.load(json_file)
-   SERVER = config["SERVER"]
-   PORT = config["PORT"]
-   BOT_EMAIL = config["BOT_EMAIL"]
-   BOT_PASSWORD = config["BOT_PASSWORD"]
-   HUMAN_EMAIL = config["HUMAN_EMAIL"]
-
 BLOCKS_PER_DAY = 144.0 # 6 per hour * 24 hours per day
 BLOCKS_PER_WEEK = 1008.0 # 144 * 7
 BLOCKS_PER_MONTH = 4032.0 # 1008 * 4
-
-
-def send_email(subject, message):
-   # Start SMTP server
-   server = smtplib.SMTP_SSL(SERVER,port=PORT)
-   server.ehlo()
-   server.login(BOT_EMAIL, BOT_PASSWORD)
-
-   dt = datetime.today()
-
-   # Send email
-   email_text = "Subject: {} {}\n\n{}".format(subject, dt.strftime("%m-%d"), message)
-   server.sendmail(BOT_EMAIL, HUMAN_EMAIL, email_text)
-
-   print("\n\n###################################\n")
-   print(email_text)
-   print()
-
-   # Stop SMTP Server
-   server.quit()
 
 
 def write_block_stats(statuses, alerts, previous_info, info):
@@ -149,7 +119,7 @@ def run_bitcoin_alerter():
    previous_info = monitor_info.get_most_recent_info()
    last_run = datetime.now().strftime("%m-%d %H:%M")#previous_info.last_status_time.strftime("%m-%d %H:%M")
       
-   #send_email("Bitcoin Monitor Online", "Bitcoin Monitor has just started. Last status email was at {}\n".format(last_run))
+   #email.send_email("Bitcoin Monitor Online", "Bitcoin Monitor has just started. Last status email was at {}\n".format(last_run))
 
    while True:
       statuses = []
@@ -173,9 +143,9 @@ def run_bitcoin_alerter():
 
       # Send Status Email
       if len(alerts) > 0:
-         send_email("Bitcoin ALERT", alert_string);
+         email.send_email("Bitcoin ALERT", alert_string);
       elif previous_info == None or (datetime.now() - previous_info.last_status_time) > timedelta(hours=STATUS_FREQUENCY_IN_HOURS):
-         send_email("Bitcoin Status Update", status_string)
+         email.send_email("Bitcoin Status Update", status_string)
          previous_info = info
          monitor_info.write_info(info)
       else:
@@ -197,7 +167,7 @@ while True:
       run_bitcoin_alerter()
       error_sleep = INITIAL_ERROR_SLEEP
    except Exception as ex:
-      send_email("Bitcoin Monitor Has Crashed", str(ex))
+      email.send_email("Bitcoin Monitor Has Crashed", str(ex))
 
    time.sleep(error_sleep)
    error_sleep *= 2
