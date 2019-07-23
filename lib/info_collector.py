@@ -78,6 +78,10 @@ def get_info(previous_info):
    priceResponse = requests.get("https://api.cryptowat.ch/markets/gdax/btcusd/price")
    info.price = priceResponse.json()['result']['price']
    
+   info.price_percent_change = 0
+   if previous_info != None:
+       info.price_percent_change = price_history.percent_change(previous_info.price, info.price)
+   
    info.reward = INITIAL_REWARD
    info.total_coins = 0
    remaining_blocks = info.blocks + 1 # Add one because blocks is 0-based

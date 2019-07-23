@@ -48,16 +48,12 @@ def write_halving_stats(statuses, alerts, previous_info, info):
 
 
 def write_price_stats(statuses, alerts, previous_info, info):   
-   price_percent_change = 0
-   if previous_info != None:
-       price_percent_change = price_history.percent_change(previous_info.price, info.price)
-      
-   statuses.append("Price: ${:,.2f} ( {:.2f} % )".format(info.price, price_percent_change))
+   statuses.append("Price: ${:,.2f} ( {:.2f} % )".format(info.price, info.price_percent_change))
    statuses.append("Market Cap: ${:,.0f}".format(info.total_coins * info.price))
 
-   if previous_info != None and previous_info.price_alert_enabled and abs(price_percent_change) > PRICE_PERCENT_CHANGE_THRESHOLD:
-      alerts.append("WARNING: Price change of {:.2f} %".format(price_percent_change))
-      previous_info.price_alert_enabled = False
+   if previous_info != None and previous_info.price_alert_enabled and abs(info.price_percent_change) > PRICE_PERCENT_CHANGE_THRESHOLD:
+      alerts.append("WARNING: Price change of {:.2f} %".format(info.price_percent_change))
+      previous_info.price_alert_enabled = False # TODO find a better way of doing this
       
       
 def write_history_stats(statuses, alerts, previous_info, info):
