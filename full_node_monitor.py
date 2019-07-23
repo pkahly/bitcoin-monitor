@@ -32,7 +32,7 @@ def write_block_stats(statuses, alerts, previous_info, info):
       new_blocks = info.blocks - previous_info.blocks
 
    statuses.append("Blocks: {:,} ( + {} )".format(info.blocks, new_blocks))
-   statuses.append("Last Block Time: {}".format(info.last_block_time.strftime("%m-%d %H:%M")))
+   statuses.append("Last Block Time: {}".format(info.last_block_time.strftime("%m-%d %I:%M %p")))
 
    if info.blocks < info.headers:
       statuses.append("Headers: {} - Blocks Behind: {}".format(info.headers, (info.headers - info.blocks)))
@@ -117,7 +117,7 @@ def write_history_stats(statuses, alerts, previous_info, info):
 ## Main Loop ##
 def run_bitcoin_alerter():
    previous_info = monitor_info.get_most_recent_info()
-   last_run = datetime.now().strftime("%m-%d %H:%M")#previous_info.last_status_time.strftime("%m-%d %H:%M")
+   last_run = previous_info.last_status_time.strftime("%m-%d %I:%M %p")
       
    #email.send_email("Bitcoin Monitor Online", "Bitcoin Monitor has just started. Last status email was at {}\n".format(last_run))
 
