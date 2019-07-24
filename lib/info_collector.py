@@ -9,27 +9,13 @@ from lib import reorg, price_history
 HALVING_RATE = 210000 # mining reward halves after this many blocks
 INITIAL_REWARD = 50.0
 
-BLOCKS_PER_DAY = 144.0 # 6 per hour * 24 hours per day
-BLOCKS_PER_WEEK = 1008.0 # 144 * 7
-BLOCKS_PER_MONTH = 4032.0 # 1008 * 4
+BLOCKS_PER_DAY = 144 # 6 per hour * 24 hours per day
+BLOCKS_PER_WEEK = 1008 # 144 * 7
+BLOCKS_PER_MONTH = 4032 # 1008 * 4
 
 
 class Info:
    last_status_time = datetime.now()
-   blocks = None
-   headers = None
-   difficulty = None
-   network_hash_rate = None
-   month_ago_block_time = None
-   week_ago_block_time = None
-   day_ago_block_time = None
-   last_block_time = None
-   block_time_delta = None
-   price = None
-   reward = None
-   total_coins = None
-   blocks_till_halving = None
-   days_till_halving = None
    price_alert_enabled = True
 
 
@@ -42,6 +28,10 @@ def get_info(previous_info):
    
    if previous_info != None:
       info.new_blocks = info.blocks - previous_info.blocks
+      
+   info.last_block_time = datetime.fromtimestamp(get_blockstats(info.blocks, "time"))
+   block_time_delta = datetime.now() - info.last_block_time
+   info.num_minutes = round(block_time_delta.total_seconds() / 60)
    
    mining_info = json.loads(subprocess.check_output(['bitcoin-cli','getmininginfo']))
    info.difficulty = mining_info["difficulty"]
@@ -53,17 +43,9 @@ def get_info(previous_info):
       info.difficulty_percent_change = price_history.percent_change(previous_info.difficulty, info.difficulty)
       info.hash_rate_percent_change = price_history.percent_change(previous_info.network_hash_rate, info.network_hash_rate)
    
-   month_ago_block_time = get_block_time(round(info.blocks - BLOCKS_PER_MONTH))      
-   week_ago_block_time = get_block_time(round(info.blocks - BLOCKS_PER_WEEK))
-   day_ago_block_time = get_block_time(round(info.blocks - BLOCKS_PER_DAY))
-   info.last_block_time = get_block_time(info.blocks)
-      
-   info.daily_avg = (info.last_block_time - day_ago_block_time).total_seconds() / BLOCKS_PER_DAY / 60
-   info.weekly_avg = (info.last_block_time - week_ago_block_time).total_seconds() / BLOCKS_PER_WEEK / 60
-   info.monthly_avg = (info.last_block_time - month_ago_block_time).total_seconds() / BLOCKS_PER_MONTH / 60
-   
-   block_time_delta = datetime.now() - info.last_block_time
-   info.num_minutes = round(block_time_delta.total_seconds() / 60)
+   info.daily_avg = get_average_block_time(info.blocks, BLOCKS_PER_DAY)
+   info.weekly_avg = get_average_block_time(info.blocks, BLOCKS_PER_WEEK)
+   info.monthly_avg = get_average_block_time(info.blocks, BLOCKS_PER_MONTH)
    
    reorg_info = reorg.add_blocks()
    highest_stored_block = reorg_info["highest_stored_block"]
@@ -94,9 +76,16 @@ def get_info(previous_info):
    return info
    
    
-def get_block_time(block_height):
-   block_stats = json.loads(subprocess.check_output(['bitcoin-cli','getblockstats',str(block_height),json.dumps(["time"])]))
-   return datetime.fromtimestamp(block_stats["time"])
+def get_average_block_time(end_block, depth):
+   end_time = datetime.fromtimestamp(get_blockstats(end_block, "mediantime"))
+   start_time = datetime.fromtimestamp(get_blockstats(end_block - depth, "mediantime"))
+   
+   return (end_time - start_time).total_seconds() / depth / 60
+   
+   
+def get_blockstats(block_height, stat):
+   block_stats = json.loads(subprocess.check_output(['bitcoin-cli','getblockstats',str(block_height),json.dumps([stat])]))
+   return block_stats[stat]
 
 
 def get_most_recent_info():
