@@ -2,11 +2,6 @@ import sqlite3
 from lib import price_history
 
 
-BLOCKS_PER_DAY = 144.0 # 6 per hour * 24 hours per day
-BLOCKS_PER_WEEK = 1008.0 # 144 * 7
-BLOCKS_PER_MONTH = 4032.0 # 1008 * 4
-
-
 def get_status(previous_info, info):
    statuses = []
 
