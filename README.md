@@ -30,7 +30,7 @@
 
 ### Set Up Instructions:
 
-- Run a full Bitcoin node (find instructions elsewhere)
+- Run a full Bitcoin node. https://bitcoincore.org/
 
 - Run main.py
 
