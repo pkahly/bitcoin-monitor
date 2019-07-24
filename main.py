@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from lib import bitcoin_alerter, install
+from lib import bitcoin_alerter, install, debug
 
 
 def install_menu():
@@ -29,16 +29,19 @@ def install_menu():
 def debug_menu():
    while True:
       print()
-      print("1. Print ....")
+      print("1. Print Blocks")
+      print("2. Print Price History")
+      print("3. Print Status History")
+      print("4. Back")
       
       choice = int(input("> "))
 
       if choice == 1:
-         print()
+         debug.print_blocks()
       elif choice == 2:
-         install_menu()     
+         debug.print_price_history()    
       elif choice == 3:
-         debug_menu()
+         debug.print_status_history()
       else:
          return
 
