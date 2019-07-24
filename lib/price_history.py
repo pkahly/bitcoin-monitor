@@ -1,9 +1,7 @@
-from datetime import datetime, timedelta
-
+from datetime import datetime
 
 def percent_change(start, end):
    return (end - start) / start * 100
-   
 
 def get_historical_price(cursor, years_ago):
    old_date = datetime.now()

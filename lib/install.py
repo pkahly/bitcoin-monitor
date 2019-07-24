@@ -1,7 +1,4 @@
 import sqlite3
-import math
-import json
-import subprocess
 from datetime import datetime
 from lib import reorg, price_history
 

@@ -1,12 +1,8 @@
-import smtplib
 import sqlite3
 import subprocess
-import pickle
-import time
 import json
 import requests
-import os
-from datetime import datetime, timedelta
+from datetime import datetime
 from lib import reorg, price_history
 
 

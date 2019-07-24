@@ -1,6 +1,6 @@
 import smtplib
 import json
-from datetime import datetime, timedelta
+from datetime import datetime
 
 with open('config.json') as json_file:
    config = json.load(json_file)

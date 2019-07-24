@@ -1,8 +1,4 @@
 import sqlite3
-import subprocess
-import requests
-import os
-from datetime import datetime, timedelta
 from lib import price_history
 
 
