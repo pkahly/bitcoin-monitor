@@ -15,6 +15,10 @@ def get_historical_price(cursor, years_ago):
    old_date_str = old_date.strftime("%Y-%m-%d")
 
    cursor.execute("SELECT close FROM historical_prices WHERE date = \"{}\"".format(old_date_str))
-   old_price = cursor.fetchone()[0]
+   result = cursor.fetchone()
    
-   return (old_date_str, old_price)
+   if result != None:
+      old_price = result[0]
+      return (old_date_str, old_price)
+   else:
+      return None

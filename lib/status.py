@@ -38,6 +38,9 @@ def get_status(previous_info, info):
    
    for years_ago in range(1, 6):
       history_info = price_history.get_historical_price(cursor, years_ago)
+      if history_info == None:
+         continue
+      
       old_date_str = history_info[0]
       old_price = history_info[1]
 
