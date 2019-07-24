@@ -1,3 +1,5 @@
+#### Note: Still under construction -- needs productionized, automated tests, etc. See open issues.
+
 ## Monitors a full Bitcoin node and sends status emails and alerts.
 
 ### Sample status contents:
@@ -30,11 +32,18 @@
 
 - Run a full Bitcoin node (find instructions elsewhere)
 
-- Run install/install.py to create a new sqllite3 database.
+- Run main.py
 
-- Run install/add_price_data.py to import historical price data. This will look for daily_history.csv.
+- Open the install menu and select "Install Alerter"
 
-- Run install/add_blocks.py to save block hashes for reorg detection. This is optional as full_node_monitor.py will do the same thing during it's first run.
+- *Optional* Still in the install menu, select "Import Historical Price Data" This will look for daily_history.csv in the current directory. The required format is as follows:
+```
+<Date>,<open>,<high>,<low>,<close>,<volume>,<market cap>
+Example row:
+Jul192019,10653.96,10716.98,10229.63,10530.73,20727426310,187725578628
+```
+
+- *Optional* Still in the install menu, run "Store Block Info". This will take a while.
 
 - Create config.json. Format:
 ```
@@ -47,4 +56,4 @@
 }
 ```
 
-- Run full_node_monitor.py. This is the main loop and will use the database tables created earlier.
+- Back in the main menu, select "Run the Bitcoin Alerter"
