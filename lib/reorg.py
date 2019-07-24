@@ -2,6 +2,8 @@ import sqlite3
 import json
 import subprocess
 
+REORG_DEPTH_CAP = 5
+
 
 def get_highest_stored_block(cursor):
    cursor.execute("SELECT height FROM block_info ORDER BY height DESC limit 1")
@@ -43,7 +45,9 @@ def add_blocks():
 
    # Check for reorgs
    last_matching_height = get_last_matching_height(cursor, highest_stored_block)
-   if last_matching_height != highest_stored_block:
+   if (last_matching_height + REORG_DEPTH_CAP) <= highest_stored_block:
+      raise RuntimeError("LARGE REORG DETECTED -- last matching block: {}".format(last_matching_height))
+   elif last_matching_height != highest_stored_block:
       delete_rows_after(connection, cursor, last_matching_height)
 
 
