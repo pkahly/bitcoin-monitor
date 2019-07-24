@@ -1,17 +1,7 @@
-#!/usr/bin/python3
-
-
-import sqlite3
-import subprocess
 import time
-import json
-import requests
-import os
 from datetime import datetime, timedelta
-from lib import reorg, price_history, info_collector, email, status, alerts
+from lib import info_collector, email, status, alerts
 
-
-# Configuration
 MINUTES_TO_SLEEP = 5
 SECONDS_TO_SLEEP = MINUTES_TO_SLEEP * 60
 INITIAL_ERROR_SLEEP = SECONDS_TO_SLEEP
@@ -22,8 +12,6 @@ def run_bitcoin_alerter():
    previous_info = info_collector.get_most_recent_info()
    last_run = previous_info.last_status_time.strftime("%m-%d %I:%M %p")
       
-   #email.send_email("Bitcoin Monitor Online", "Bitcoin Monitor has just started. Last status email was at {}\n".format(last_run))
-
    while True:
       info = info_collector.get_info(previous_info)
       
@@ -49,17 +37,17 @@ def run_bitcoin_alerter():
       time.sleep(SECONDS_TO_SLEEP)
 
 
+def run_bitcoin_alerter_with_exponential_backoff():
+   #email.send_email("Bitcoin Monitor Online", "Bitcoin Monitor has just started. Last status email was at {}\n".format(last_run))
+   
+   error_sleep = INITIAL_ERROR_SLEEP
+   while True:
+      try:
+         run_bitcoin_alerter()
+         error_sleep = INITIAL_ERROR_SLEEP
+      except Exception as ex:
+         email.send_email("Bitcoin Monitor Has Crashed", str(ex))
 
-############################################################################
+      time.sleep(error_sleep)
+      error_sleep *= 2
 
-
-error_sleep = INITIAL_ERROR_SLEEP
-while True:
-   try:
-      run_bitcoin_alerter()
-      error_sleep = INITIAL_ERROR_SLEEP
-   except Exception as ex:
-      email.send_email("Bitcoin Monitor Has Crashed", str(ex))
-
-   time.sleep(error_sleep)
-   error_sleep *= 2
