@@ -54,8 +54,10 @@ while True:
    print("Welcome to the Bitcoin-Alerter")
    print("1. Run the Bitcoin Alerter")
    print("2. Installation Options")
-   print("3. Debugging Options")
-   print("4. Exit")
+   print("3. Configuration")
+   print("4. Debugging")
+   print("5. Administration")
+   print("6. Exit")
 
    choice = int(input("> "))
 
@@ -63,8 +65,12 @@ while True:
       print("Running Alerter...")
       bitcoin_alerter.run_bitcoin_alerter_with_exponential_backoff()
    elif choice == 2:
-      install_menu()     
+      install_menu()
    elif choice == 3:
+      print("Not implemented")
+   elif choice == 4:
       debug_menu()
+   elif choice == 5:
+      print("Not implemented")
    else:
       exit()
