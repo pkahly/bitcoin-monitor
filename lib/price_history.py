@@ -21,4 +21,5 @@ def get_historical_price(cursor, years_ago):
       old_price = result[0]
       return (old_date_str, old_price)
    else:
+      print("No price data for {}".format(old_date_str))
       return None

@@ -34,6 +34,7 @@ def install():
 
    cursor.execute(sql_command)
 
+
    # Create status_info table
    sql_command = """
    CREATE TABLE status_info (
@@ -44,7 +45,6 @@ def install():
    price REAL);"""
 
    cursor.execute(sql_command)
-
 
    # Commit and Close
    connection.commit()
@@ -74,8 +74,9 @@ def import_historical_prices():
    cursor = connection.cursor()
 
    with open(HISTORICAL_PRICE_FILENAME, 'r') as file:
-      num_lines = len(list(file))
-      for line in reversed(list(file)):
+      lines = list(file)
+      num_lines = len(lines)
+      for line in reversed(lines):
          line_split = line.rstrip().split(',')
 
          date = datetime.strptime(line_split[0], "%b%d%Y").strftime("%Y-%m-%d")
