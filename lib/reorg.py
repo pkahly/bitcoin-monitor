@@ -7,7 +7,12 @@ REORG_DEPTH_CAP = 5
 
 def get_highest_stored_block(cursor):
    cursor.execute("SELECT height FROM block_info ORDER BY height DESC limit 1")
-   return cursor.fetchone()[0]
+   result = cursor.fetchone()
+   
+   if result == None:
+      return -1
+   else:
+      return result[0]
 
 def get_current_hash(height):
    hash = subprocess.check_output(['bitcoin-cli','getblockhash', str(height)])

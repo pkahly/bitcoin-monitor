@@ -49,6 +49,7 @@ def install():
    # Commit and Close
    connection.commit()
    connection.close()
+   print("Install completed successfully")
 
 
 def add_blocks():
