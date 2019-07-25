@@ -74,6 +74,7 @@ def import_historical_prices():
    cursor = connection.cursor()
 
    with open(HISTORICAL_PRICE_FILENAME, 'r') as file:
+      num_lines = len(list(file))
       for line in reversed(list(file)):
          line_split = line.rstrip().split(',')
 
@@ -100,6 +101,7 @@ def import_historical_prices():
    # Commit and Close
    connection.commit()
    connection.close()
+   print("Added {} historical price points to database".format(num_lines))
    
    
 def uninstall():
@@ -113,3 +115,4 @@ def uninstall():
    # Commit and Close
    connection.commit()
    connection.close()
+   print("Uninstall completed successfully")

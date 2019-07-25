@@ -33,6 +33,7 @@ def get_last_matching_height(cursor, height):
          return height
          
       height -= 1
+   return -1
       
       
 def delete_rows_after(connection, cursor, height):
@@ -64,6 +65,7 @@ def add_blocks():
       cursor.execute(sql_command)
       
       if height % 100 == 0:
+         print("Adding Block: {}".format(height))
          connection.commit()
 
 

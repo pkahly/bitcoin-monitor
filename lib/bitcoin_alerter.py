@@ -8,10 +8,7 @@ INITIAL_ERROR_SLEEP = SECONDS_TO_SLEEP
 STATUS_FREQUENCY_IN_HOURS = 4
 
 
-def run_bitcoin_alerter():
-   previous_info = info_collector.get_most_recent_info()
-   last_run = previous_info.last_status_time.strftime("%m-%d %I:%M %p")
-      
+def run_bitcoin_alerter(previous_info):
    while True:
       info = info_collector.get_info(previous_info)
       
@@ -38,12 +35,18 @@ def run_bitcoin_alerter():
 
 
 def run_bitcoin_alerter_with_exponential_backoff():
+   previous_info = info_collector.get_most_recent_info()
+
+   last_run = "Never"
+   if previous_info != None:
+      last_run = previous_info.last_status_time.strftime("%m-%d %I:%M %p")
+      
    #email.send_email("Bitcoin Monitor Online", "Bitcoin Monitor has just started. Last status email was at {}\n".format(last_run))
    
    error_sleep = INITIAL_ERROR_SLEEP
    while True:
       try:
-         run_bitcoin_alerter()
+         run_bitcoin_alerter(previous_info)
          error_sleep = INITIAL_ERROR_SLEEP
       except Exception as ex:
          try:
