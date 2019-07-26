@@ -4,6 +4,7 @@ from datetime import datetime
 
 with open('config.json') as json_file:
    config = json.load(json_file)
+   ENABLE_EMAILS = config["ENABLE_EMAILS"]
    SERVER = config["SERVER"]
    PORT = config["PORT"]
    BOT_EMAIL = config["BOT_EMAIL"]
@@ -20,7 +21,8 @@ def send_email(subject, message):
 
    # Send email
    email_text = "Subject: {} {}\n\n{}".format(subject, dt.strftime("%m-%d"), message)
-   server.sendmail(BOT_EMAIL, HUMAN_EMAIL, email_text)
+   if ENABLE_EMAILS:
+      server.sendmail(BOT_EMAIL, HUMAN_EMAIL, email_text)
 
    print("\n\n###################################\n")
    print(email_text)

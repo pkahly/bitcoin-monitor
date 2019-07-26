@@ -5,7 +5,7 @@ from lib import info_collector, email, status, alerts
 MINUTES_TO_SLEEP = 5
 SECONDS_TO_SLEEP = MINUTES_TO_SLEEP * 60
 INITIAL_ERROR_SLEEP = SECONDS_TO_SLEEP
-STATUS_FREQUENCY_IN_HOURS = 4
+STATUS_FREQUENCY_IN_HOURS = 0#4 TODO uncomment
 
 
 def run_bitcoin_alerter(previous_info):
