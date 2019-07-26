@@ -49,6 +49,7 @@ def run_bitcoin_alerter_with_exponential_backoff():
          run_bitcoin_alerter(previous_info)
          error_sleep = INITIAL_ERROR_SLEEP
       except Exception as ex:
+         print(ex)
          try:
             email.send_email("Bitcoin Monitor Has Crashed", str(ex))
          except:
