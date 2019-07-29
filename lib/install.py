@@ -1,9 +1,6 @@
 import sqlite3
 from datetime import datetime
-from lib import reorg, price_history
-
-
-HISTORICAL_PRICE_FILENAME = 'daily_history.csv'
+from lib import reorg, price_history, config_reader
 
 
 def install():

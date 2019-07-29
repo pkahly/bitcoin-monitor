@@ -1,9 +1,6 @@
 import sqlite3
 import json
-from lib import bitcoin_node_api
-
-REORG_DEPTH_CAP = 5
-
+from lib import bitcoin_node_api, config_reader
 
 def get_highest_stored_block(cursor):
    cursor.execute("SELECT height FROM block_info ORDER BY height DESC limit 1")
@@ -38,6 +35,7 @@ def delete_rows_after(connection, cursor, height):
    
    
 def add_blocks():
+   config = config_reader.get_config()
    connection = sqlite3.connect("bitcoin.db")
    cursor = connection.cursor()
 
@@ -46,7 +44,7 @@ def add_blocks():
 
    # Check for reorgs
    last_matching_height = get_last_matching_height(cursor, highest_stored_block)
-   if (last_matching_height + REORG_DEPTH_CAP) <= highest_stored_block:
+   if (last_matching_height + config.reorg_depth_cap) <= highest_stored_block:
       raise RuntimeError("LARGE REORG DETECTED -- last matching block: {}".format(last_matching_height))
    elif last_matching_height != highest_stored_block:
       delete_rows_after(connection, cursor, last_matching_height)

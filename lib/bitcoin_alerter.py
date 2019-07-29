@@ -1,12 +1,10 @@
 import time
 from datetime import datetime, timedelta
-from lib import info_collector, email, status, alerts
+from lib import info_collector, email, status, alerts, config_reader
 
-MINUTES_TO_SLEEP = 5
-SECONDS_TO_SLEEP = MINUTES_TO_SLEEP * 60
+config = config_reader.get_config()
+SECONDS_TO_SLEEP = config.minutes_to_sleep * 60
 INITIAL_ERROR_SLEEP = SECONDS_TO_SLEEP
-STATUS_FREQUENCY_IN_HOURS = 0#4 TODO uncomment
-
 
 def run_bitcoin_alerter(previous_info):
    while True:
@@ -20,12 +18,12 @@ def run_bitcoin_alerter(previous_info):
       # Send Status Email
       if len(alert_list) > 0:
          email.send_email("Bitcoin ALERT", alert_string);
-      elif previous_info == None or (datetime.now() - previous_info.last_status_time) > timedelta(hours=STATUS_FREQUENCY_IN_HOURS):
+      elif previous_info == None or (datetime.now() - previous_info.last_status_time) > timedelta(hours=config.status_frequency_in_hours):
          email.send_email("Bitcoin Status Update", status_string)
          previous_info = info
          info_collector.write_info(info)
       else:
-         td = timedelta(hours=STATUS_FREQUENCY_IN_HOURS) - (datetime.now() - previous_info.last_status_time)
+         td = timedelta(hours=config.status_frequency_in_hours) - (datetime.now() - previous_info.last_status_time)
          hours, remainder = divmod(td.seconds, 3600)
          minutes, seconds = divmod(remainder, 60)
          print("No alerts. Next status email in: {}:{}:{}".format(hours, minutes, seconds))
