@@ -42,7 +42,9 @@ def run_bitcoin_alerter_with_exponential_backoff():
       last_run = previous_info.last_status_time.strftime("%m-%d %I:%M %p")
       
    #email.send_email("Bitcoin Monitor Online", "Bitcoin Monitor has just started. Last status email was at {}\n".format(last_run))
-   
+ 
+   run_bitcoin_alerter(previous_info) # TODO revert
+   """  
    error_sleep = INITIAL_ERROR_SLEEP
    while True:
       try:
@@ -57,4 +59,5 @@ def run_bitcoin_alerter_with_exponential_backoff():
 
       time.sleep(error_sleep)
       error_sleep *= 2
+   """
 

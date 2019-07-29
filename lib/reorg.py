@@ -1,6 +1,6 @@
 import sqlite3
 import json
-import subprocess
+from lib import bitcoin_node_api
 
 REORG_DEPTH_CAP = 5
 
@@ -14,11 +14,6 @@ def get_highest_stored_block(cursor):
    else:
       return result[0]
 
-def get_current_hash(height):
-   hash = subprocess.check_output(['bitcoin-cli','getblockhash', str(height)])
-   return hash.decode("utf-8").replace('\n', '') 
-
-
 def get_stored_hash(cursor, height):
    cursor.execute("SELECT hash FROM block_info where height = {}".format(int(height)))
    return cursor.fetchone()[0]
@@ -27,7 +22,7 @@ def get_stored_hash(cursor, height):
 def get_last_matching_height(cursor, height):
    while height >= 0:
       old_hash = get_stored_hash(cursor, height)
-      new_hash = get_current_hash(height)
+      new_hash = bitcoin_node_api.get_current_hash(height)
       
       if old_hash == new_hash:
          return height
@@ -47,7 +42,7 @@ def add_blocks():
    cursor = connection.cursor()
 
    highest_stored_block = get_highest_stored_block(cursor)
-   num_blocks = json.loads(subprocess.check_output(['bitcoin-cli','getblockcount']))
+   num_blocks = bitcoin_node_api.get_num_blocks()
 
    # Check for reorgs
    last_matching_height = get_last_matching_height(cursor, highest_stored_block)
@@ -59,7 +54,7 @@ def add_blocks():
 
    # Store hashes of new blocks
    for height in reversed(range(last_matching_height + 1, num_blocks + 1)):
-      hash = get_current_hash(height)
+      hash = bitcoin_node_api.get_current_hash(height)
       
       sql_command = "INSERT INTO block_info (height, hash)\nVALUES ({}, \"{}\");".format(height, hash)
       cursor.execute(sql_command)

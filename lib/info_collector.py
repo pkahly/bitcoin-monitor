@@ -1,9 +1,8 @@
 import sqlite3
-import subprocess
 import json
 import requests
 from datetime import datetime
-from lib import reorg, price_history
+from lib import reorg, price_history, bitcoin_node_api
 
 
 HALVING_RATE = 210000 # mining reward halves after this many blocks
@@ -23,17 +22,17 @@ def get_info(previous_info):
    info = Info()
    info.last_status_time = datetime.now()
    
-   info.blocks = json.loads(subprocess.check_output(['bitcoin-cli','getblockcount']))
+   info.blocks = bitcoin_node_api.get_num_blocks()
    info.new_blocks = 0
    
    if previous_info != None:
       info.new_blocks = info.blocks - previous_info.blocks
       
-   info.last_block_time = datetime.fromtimestamp(get_blockstats(info.blocks, "time"))
+   info.last_block_time = datetime.fromtimestamp(bitcoin_node_api.get_blockstats(info.blocks, "time"))
    block_time_delta = datetime.now() - info.last_block_time
    info.num_minutes = round(block_time_delta.total_seconds() / 60)
    
-   mining_info = json.loads(subprocess.check_output(['bitcoin-cli','getmininginfo']))
+   mining_info = bitcoin_node_api.get_mining_info()
    info.difficulty = mining_info["difficulty"]
    info.network_hash_rate = mining_info["networkhashps"]
    
@@ -77,17 +76,12 @@ def get_info(previous_info):
    
    
 def get_average_block_time(end_block, depth):
-   end_time = datetime.fromtimestamp(get_blockstats(end_block, "mediantime"))
-   start_time = datetime.fromtimestamp(get_blockstats(end_block - depth, "mediantime"))
+   end_time = datetime.fromtimestamp(bitcoin_node_api.get_blockstats(end_block, "mediantime"))
+   start_time = datetime.fromtimestamp(bitcoin_node_api.get_blockstats(end_block - depth, "mediantime"))
    
    return (end_time - start_time).total_seconds() / depth / 60
    
    
-def get_blockstats(block_height, stat):
-   block_stats = json.loads(subprocess.check_output(['bitcoin-cli','getblockstats',str(block_height),json.dumps([stat])]))
-   return block_stats[stat]
-
-
 def get_most_recent_info():
    connection = sqlite3.connect("bitcoin.db")
    cursor = connection.cursor()
