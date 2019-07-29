@@ -20,7 +20,6 @@ class Info:
 
 def get_info(previous_info):
    info = Info()
-   info.last_status_time = datetime.now()
    
    info.blocks = bitcoin_node_api.get_num_blocks()
    info.new_blocks = 0

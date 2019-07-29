@@ -1,28 +1,19 @@
 import smtplib
-import json
 from datetime import datetime
-
-with open('config.json') as json_file:
-   config = json.load(json_file)
-   ENABLE_EMAILS = config["ENABLE_EMAILS"]
-   
-   if ENABLE_EMAILS:
-      SERVER = config["SERVER"]
-      PORT = config["PORT"]
-      BOT_EMAIL = config["BOT_EMAIL"]
-      BOT_PASSWORD = config["BOT_PASSWORD"]
-      HUMAN_EMAIL = config["HUMAN_EMAIL"]
+from lib import config_reader
 
 
 def send_email(subject, message):
+   config = config_reader.get_config()
    dt = datetime.today()
+   
    email_text = "Subject: {} {}\n\n{}".format(subject, dt.strftime("%m-%d"), message)
 
-   if ENABLE_EMAILS:
-      server = smtplib.SMTP_SSL(SERVER,port=PORT)
+   if config.enable_emails:
+      server = smtplib.SMTP_SSL(config.server, port=config.port)
       server.ehlo()
-      server.login(BOT_EMAIL, BOT_PASSWORD)
-      server.sendmail(BOT_EMAIL, HUMAN_EMAIL, email_text)
+      server.login(config.bot_email, config.bot_password)
+      server.sendmail(config.bot_email, config.human_email, email_text)
       server.quit()
 
    print("\n\n###################################\n")
