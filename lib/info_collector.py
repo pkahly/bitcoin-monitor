@@ -22,8 +22,11 @@ def get_info(previous_info):
    info = Info()
    
    info.blocks = bitcoin_node_api.get_num_blocks()
+   headers = bitcoin_node_api.get_num_headers()
+   if info.blocks != headers:
+      raise RuntimeError("Verifying Blocks: {} / {}".format(info.blocks, headers))
+
    info.new_blocks = 0
-   
    if previous_info != None:
       info.new_blocks = info.blocks - previous_info.blocks
       

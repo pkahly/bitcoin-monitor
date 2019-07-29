@@ -9,6 +9,11 @@ def get_current_hash(height):
 
 def get_num_blocks():
    return json.loads(subprocess.check_output(['bitcoin-cli','getblockcount']))
+   
+   
+def get_num_headers():
+   blockchain_info = json.loads(subprocess.check_output(['bitcoin-cli','getblockchaininfo']))
+   return blockchain_info["headers"]
 
 
 def get_mining_info():
