@@ -6,7 +6,9 @@ config = config_reader.get_config()
 SECONDS_TO_SLEEP = config.minutes_to_sleep * 60
 INITIAL_ERROR_SLEEP = SECONDS_TO_SLEEP
 
-def run_bitcoin_alerter(previous_info):
+def run_bitcoin_alerter():
+   previous_info = info_collector.get_most_recent_info()
+   
    while True:
       info = info_collector.get_info(previous_info)
       
@@ -18,7 +20,7 @@ def run_bitcoin_alerter(previous_info):
       # Send Status Email
       if len(alert_list) > 0:
          email.send_email("Bitcoin ALERT", alert_string);
-      elif previous_info == None or (datetime.now() - previous_info.last_status_time) > timedelta(hours=config.status_frequency_in_hours):
+      elif previous_info == None or (datetime.now() - previous_info.last_status_time) > timedelta(hours=STATUS_FREQUENCY_IN_HOURS):
          email.send_email("Bitcoin Status Update", status_string)
          previous_info = info
          info_collector.write_info(info)
@@ -33,15 +35,7 @@ def run_bitcoin_alerter(previous_info):
 
 
 def run_bitcoin_alerter_with_exponential_backoff():
-   previous_info = info_collector.get_most_recent_info()
-
-   last_run = "Never"
-   if previous_info != None:
-      last_run = previous_info.last_status_time.strftime("%m-%d %I:%M %p")
-      
-   #email.send_email("Bitcoin Monitor Online", "Bitcoin Monitor has just started. Last status email was at {}\n".format(last_run))
- 
-   run_bitcoin_alerter(previous_info) # TODO revert
+   run_bitcoin_alerter() # TODO revert
    """  
    error_sleep = INITIAL_ERROR_SLEEP
    while True:
