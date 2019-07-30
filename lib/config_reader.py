@@ -1,28 +1,36 @@
 import json
+import os
 
 
 CONFIG_FILE = 'config.json'
 
    
 class Config:
-   enable_emails = False
-   server = None
-   port = None
-   bot_email = None
-   bot_password = None
-   human_email = None
-   
-   minutes_to_sleep = 5
-   status_frequency_in_hours = 4
-   historical_price_filename = 'daily_history.csv'
-   
-   block_reorg_threshold = 0
-   minutes_between_blocks_threshold = 90
-   price_percent_change_threshold = 5
-   reorg_depth_cap = 5
+   def __init__(self):
+      self.enable_emails = False
+      self.server = ""
+      self.port = ""
+      self.bot_email = ""
+      self.bot_password = ""
+      self.human_email = ""
+      
+      self.minutes_to_sleep = 5
+      self.status_frequency_in_hours = 4
+      self.historical_price_filename = 'daily_history.csv'
+      
+      self.block_reorg_threshold = 0
+      self.minutes_between_blocks_threshold = 90
+      self.price_percent_change_threshold = 5
+      self.reorg_depth_cap = 5
    
 
 def get_config():
+   if not os.path.isfile(CONFIG_FILE):
+      config_str = json.dumps(Config().__dict__)
+      with open(CONFIG_FILE, 'w') as json_file:
+         json_file.write(config_str)
+      print("Created default config.json")
+
    with open(CONFIG_FILE) as json_file:
       config_file = json.load(json_file)
       config = Config()
