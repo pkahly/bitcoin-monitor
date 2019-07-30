@@ -25,12 +25,24 @@ class Config:
    
 
 def get_config():
+   _write_config_if_missing()
+   
+   try:
+      return _read_config()
+   except KeyError as ex:
+      raise RuntimeError("Missing Required Config Option. {}".format(ex))
+
+def _write_config_if_missing():
    if not os.path.isfile(CONFIG_FILE):
       config_str = json.dumps(Config().__dict__)
+      
       with open(CONFIG_FILE, 'w') as json_file:
          json_file.write(config_str)
+      
       print("Created default config.json")
 
+
+def _read_config():
    with open(CONFIG_FILE) as json_file:
       config_file = json.load(json_file)
       config = Config()

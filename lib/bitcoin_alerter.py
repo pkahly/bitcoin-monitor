@@ -43,7 +43,6 @@ def run_bitcoin_alerter_with_exponential_backoff():
    error_sleep = INITIAL_ERROR_SLEEP
    while True:
       try:
-         raise RuntimeError()
          run_bitcoin_alerter(previous_info)
          error_sleep = INITIAL_ERROR_SLEEP
       except Exception as ex:
