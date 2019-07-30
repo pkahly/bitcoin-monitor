@@ -20,14 +20,13 @@ def run_bitcoin_alerter():
       # Send Status Email
       if len(alert_list) > 0:
          email.send_email("Bitcoin ALERT", alert_string);
-      elif previous_info == None or (datetime.now() - previous_info.last_status_time) > timedelta(hours=STATUS_FREQUENCY_IN_HOURS):
+      elif previous_info == None or (datetime.now() - previous_info.last_status_time) > timedelta(hours=config.status_frequency_in_hours):
          email.send_email("Bitcoin Status Update", status_string)
          previous_info = info
          info_collector.write_info(info)
       else:
          td = timedelta(hours=config.status_frequency_in_hours) - (datetime.now() - previous_info.last_status_time)
-         hours, remainder = divmod(td.seconds, 3600)
-         minutes, seconds = divmod(remainder, 60)
+         hours, minutes, seconds = format_time(td.seconds)
          print("No alerts. Next status email in: {}:{}:{}".format(hours, minutes, seconds))
 
       # Sleep
@@ -40,6 +39,7 @@ def run_bitcoin_alerter_with_exponential_backoff():
    error_sleep = INITIAL_ERROR_SLEEP
    while True:
       try:
+         raise RuntimeError()
          run_bitcoin_alerter(previous_info)
          error_sleep = INITIAL_ERROR_SLEEP
       except Exception as ex:
@@ -49,7 +49,16 @@ def run_bitcoin_alerter_with_exponential_backoff():
          except:
             print("Failed to send crash report")
 
+      hours, minutes, seconds = format_time(error_sleep)
+      print("Retry in {}:{}".format(hours, minutes))
+      
       time.sleep(error_sleep)
       error_sleep *= 2
    """
 
+
+def format_time(total_seconds):
+   hours, remainder = divmod(total_seconds, 3600)
+   minutes, seconds = divmod(remainder, 60)
+   
+   return (hours, minutes, seconds)
