@@ -4,7 +4,10 @@ from lib import info_collector, email, status, alerts, config_reader, time_tools
 
 config = config_reader.get_config()
 SECONDS_TO_SLEEP = config.minutes_to_sleep * 60
+
+# Settings for exponential backoff, max is equal to the status frequency, or at least one hour
 INITIAL_ERROR_SLEEP = SECONDS_TO_SLEEP
+MAX_ERROR_SLEEP = max(3600 * config.status_frequency_in_hours, 3600)
 
 def run_bitcoin_alerter():
    previous_info = info_collector.get_most_recent_info()
@@ -43,7 +46,7 @@ def run_bitcoin_alerter_with_exponential_backoff():
    error_sleep = INITIAL_ERROR_SLEEP
    while True:
       try:
-         run_bitcoin_alerter(previous_info)
+         run_bitcoin_alerter()
          error_sleep = INITIAL_ERROR_SLEEP
       except Exception as ex:
          print(ex)
@@ -56,6 +59,6 @@ def run_bitcoin_alerter_with_exponential_backoff():
       print("Retry in {}:{}".format(hours, minutes))
       
       time.sleep(error_sleep)
-      error_sleep *= 2
+      error_sleep = min(error_sleep * 2, MAX_ERROR_SLEEP)
    """
 
