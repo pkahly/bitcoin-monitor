@@ -17,6 +17,7 @@ class Config:
       self.minutes_to_sleep = 5
       self.status_frequency_in_hours = 4
       self.historical_price_filename = 'daily_history.csv'
+      self.catch_errors = True
       
       self.block_reorg_threshold = 0
       self.minutes_between_blocks_threshold = 90
@@ -59,6 +60,7 @@ def _read_config():
       config.minutes_to_sleep = config_file["minutes_to_sleep"]
       config.status_frequency_in_hours = config_file["status_frequency_in_hours"]
       config.historical_price_filename = config_file["historical_price_filename"]
+      config.catch_errors = config_file["catch_errors"]
 
       config.block_reorg_threshold = config_file["block_reorg_threshold"]
       config.minutes_between_blocks_threshold = config_file["minutes_between_blocks_threshold"]

@@ -63,7 +63,7 @@ while True:
 
    if choice == 1:
       print("Running Alerter...")
-      bitcoin_alerter.run_bitcoin_alerter_with_exponential_backoff()
+      bitcoin_alerter.run_bitcoin_alerter()
    elif choice == 2:
       install_menu()
    elif choice == 3:
