@@ -14,7 +14,8 @@ BLOCKS_PER_MONTH = 4032 # 1008 * 4
 
 
 class Info:
-   status_time = datetime.now()
+   def __init__(self):
+      self.status_time = datetime.now()
 
 
 def get_info(previous_info):
@@ -112,7 +113,7 @@ def write_info(info):
    connection = sqlite3.connect("bitcoin.db")
    cursor = connection.cursor()
    
-   timestamp = round(datetime.timestamp(info.status_time))
+   timestamp = int(datetime.timestamp(info.status_time)) # truncate the microsecond portion
 
    sql_command = "INSERT INTO status_info (timestamp, blocks, difficulty, network_hash_rate, price)\nVALUES ({}, {}, {}, {}, {});".format(timestamp, info.blocks, info.difficulty, info.network_hash_rate, info.price)
    cursor.execute(sql_command)
