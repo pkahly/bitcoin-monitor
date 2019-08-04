@@ -13,8 +13,7 @@ def get_alerts(previous_info, info):
    if info.reorg_length > config.block_reorg_threshold:
       alerts.append("WARNING: Block Reorg of {} blocks has occurred".format(info.reorg_length))
       
-   if previous_info != None and previous_info.price_alert_enabled and abs(info.price_percent_change) > config.price_percent_change_threshold:
+   if previous_info != None and abs(info.price_percent_change) > config.price_percent_change_threshold:
       alerts.append("WARNING: Price change of {:.2f} %".format(info.price_percent_change))
-      previous_info.price_alert_enabled = False # TODO find a better way of doing this
    
    return alerts

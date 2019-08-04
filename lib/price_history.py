@@ -1,6 +1,8 @@
 from datetime import datetime
 
 def percent_change(start, end):
+   start = float(start)
+   end = float(end)
    return (end - start) / start * 100
 
 def get_historical_price(cursor, years_ago):

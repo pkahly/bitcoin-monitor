@@ -32,6 +32,9 @@ def _run():
          alert_string = "\n".join(alert_list) + "\n\n" + status_string
          
          email.send_email("Bitcoin ALERT", alert_string);
+
+         previous_info = info
+         info_collector.write_info(info)
       elif previous_info == None or (datetime.now() - previous_info.last_status_time) > timedelta(hours=config.status_frequency_in_hours):
          # Send status
          status_string = status.get_status(previous_info, info)

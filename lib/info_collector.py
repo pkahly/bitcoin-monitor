@@ -15,7 +15,6 @@ BLOCKS_PER_MONTH = 4032 # 1008 * 4
 
 class Info:
    last_status_time = datetime.now()
-   price_alert_enabled = True
 
 
 def get_info(previous_info):
