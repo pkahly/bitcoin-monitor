@@ -70,7 +70,8 @@ def import_historical_prices():
    connection = sqlite3.connect("bitcoin.db")
    cursor = connection.cursor()
 
-   with open(HISTORICAL_PRICE_FILENAME, 'r') as file:
+   config = config_reader.get_config()
+   with open(config.historical_price_filename, 'r') as file:
       lines = list(file)
       num_lines = len(lines)
       for line in reversed(lines):

@@ -13,6 +13,9 @@ class Config:
       self.bot_email = ""
       self.bot_password = ""
       self.human_email = ""
+
+      self.bitcoind_user = "alerterbot"
+      self.bitcoind_pass = "DO_NOT_USE_76cf8e3a30fb29b4131a8babb"
       
       self.minutes_to_sleep = 5
       self.status_frequency_in_hours = 4
@@ -56,6 +59,9 @@ def _read_config():
          config.bot_email = config_file["bot_email"]
          config.bot_password = config_file["bot_password"]
          config.human_email = config_file["human_email"]
+
+      config.bitcoind_user = config_file["bitcoind_user"]
+      config.bitcoind_pass = config_file["bitcoind_pass"]
          
       config.minutes_to_sleep = config_file["minutes_to_sleep"]
       config.status_frequency_in_hours = config_file["status_frequency_in_hours"]

@@ -26,7 +26,7 @@ def get_info(previous_info):
    if info.blocks != headers:
       raise RuntimeError("Verifying Blocks: {} / {}".format(info.blocks, headers))
 
-   info.new_blocks = 0
+   info.new_blocks = info.blocks
    if previous_info != None:
       info.new_blocks = info.blocks - previous_info.blocks
       
@@ -78,8 +78,13 @@ def get_info(previous_info):
    
    
 def get_average_block_time(end_block, depth):
+   start_block = end_block - depth
+
+   if start_block < 0:
+      return 0
+
    end_time = datetime.fromtimestamp(bitcoin_node_api.get_blockstats(end_block, "mediantime"))
-   start_time = datetime.fromtimestamp(bitcoin_node_api.get_blockstats(end_block - depth, "mediantime"))
+   start_time = datetime.fromtimestamp(bitcoin_node_api.get_blockstats(start_block, "mediantime"))
    
    return (end_time - start_time).total_seconds() / depth / 60
    
