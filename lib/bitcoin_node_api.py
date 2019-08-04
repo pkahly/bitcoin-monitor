@@ -1,10 +1,16 @@
 from bitcoinrpc.authproxy import AuthServiceProxy
 from lib import config_reader
 
-BITCOIND_ADDRESS_TEMPLATE = "http://{}:{}@127.0.0.1:8332"
+BITCOIND_ADDRESS_TEMPLATE = "http://{}:{}@127.0.0.1:{}"
+MAINNET_PORT = 8332
+TESTNET_PORT = 18332
+REGTEST_PORT = 18443
 
 config = config_reader.get_config()
-client = AuthServiceProxy(BITCOIND_ADDRESS_TEMPLATE.format(config.bitcoind_user, config.bitcoind_pass))
+port = MAINNET_PORT
+
+address = BITCOIND_ADDRESS_TEMPLATE.format(config.bitcoind_user, config.bitcoind_pass, port)
+client = AuthServiceProxy(address)
 
 
 def get_current_hash(height):
