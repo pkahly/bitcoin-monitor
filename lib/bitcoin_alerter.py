@@ -5,9 +5,9 @@ from lib import info_collector, email, status, alerts, config_reader, time_tools
 config = config_reader.get_config()
 SECONDS_TO_SLEEP = config.minutes_to_sleep * 60
 
-# Settings for exponential backoff, max is equal to the status frequency, or at least one hour
-INITIAL_ERROR_SLEEP = SECONDS_TO_SLEEP
-MAX_ERROR_SLEEP = max(3600 * config.status_frequency_in_hours, 3600)
+# Settings for exponential backoff
+INITIAL_ERROR_SLEEP = 600 # 10 minutes
+MAX_ERROR_SLEEP = 14400 # 4 hours
 
 
 def run_bitcoin_alerter():
