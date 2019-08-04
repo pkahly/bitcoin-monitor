@@ -19,9 +19,10 @@ class Info:
 
 def get_info(previous_info):
    info = Info()
+   bitcoin_client = bitcoin_node_api.BitcoinAPIClient()
    
-   info.blocks = bitcoin_node_api.get_num_blocks()
-   headers = bitcoin_node_api.get_num_headers()
+   info.blocks = bitcoin_client.get_num_blocks()
+   headers = bitcoin_client.get_num_headers()
    if info.blocks != headers:
       raise RuntimeError("Verifying Blocks: {} / {}".format(info.blocks, headers))
 
@@ -29,11 +30,11 @@ def get_info(previous_info):
    if previous_info != None:
       info.new_blocks = info.blocks - previous_info.blocks
       
-   info.last_block_time = datetime.fromtimestamp(bitcoin_node_api.get_blockstats(info.blocks, "time"))
+   info.last_block_time = datetime.fromtimestamp(bitcoin_client.get_blockstats(info.blocks, "time"))
    block_time_delta = datetime.now() - info.last_block_time
    info.num_minutes = round(block_time_delta.total_seconds() / 60)
    
-   mining_info = bitcoin_node_api.get_mining_info()
+   mining_info = bitcoin_client.get_mining_info()
    info.difficulty = mining_info["difficulty"]
    info.network_hash_rate = mining_info["networkhashps"]
    
@@ -43,11 +44,11 @@ def get_info(previous_info):
       info.difficulty_percent_change = price_history.percent_change(previous_info.difficulty, info.difficulty)
       info.hash_rate_percent_change = price_history.percent_change(previous_info.network_hash_rate, info.network_hash_rate)
    
-   info.daily_avg = get_average_block_time(info.blocks, BLOCKS_PER_DAY)
-   info.weekly_avg = get_average_block_time(info.blocks, BLOCKS_PER_WEEK)
-   info.monthly_avg = get_average_block_time(info.blocks, BLOCKS_PER_MONTH)
+   info.daily_avg = get_average_block_time(bitcoin_client, info.blocks, BLOCKS_PER_DAY)
+   info.weekly_avg = get_average_block_time(bitcoin_client, info.blocks, BLOCKS_PER_WEEK)
+   info.monthly_avg = get_average_block_time(bitcoin_client, info.blocks, BLOCKS_PER_MONTH)
    
-   reorg_info = reorg.add_blocks()
+   reorg_info = reorg.add_blocks(bitcoin_client)
    highest_stored_block = reorg_info["highest_stored_block"]
    last_matching_height = reorg_info["last_matching_height"]
    
@@ -76,14 +77,14 @@ def get_info(previous_info):
    return info
    
    
-def get_average_block_time(end_block, depth):
+def get_average_block_time(bitcoin_client, end_block, depth):
    start_block = end_block - depth
 
    if start_block < 0:
       return 0
 
-   end_time = datetime.fromtimestamp(bitcoin_node_api.get_blockstats(end_block, "mediantime"))
-   start_time = datetime.fromtimestamp(bitcoin_node_api.get_blockstats(start_block, "mediantime"))
+   end_time = datetime.fromtimestamp(bitcoin_client.get_blockstats(end_block, "mediantime"))
+   start_time = datetime.fromtimestamp(bitcoin_client.get_blockstats(start_block, "mediantime"))
    
    return (end_time - start_time).total_seconds() / depth / 60
    
