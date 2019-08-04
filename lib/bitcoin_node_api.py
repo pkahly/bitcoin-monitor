@@ -12,7 +12,14 @@ class BitcoinAPIClient:
    def __init__(self):
       config = config_reader.get_config()
 
-      port = MAINNET_PORT # TODO determine from config
+      port = MAINNET_PORT
+      if config.use_testnet and config.use_regtest:
+         raise RuntimeError("Cannot specify both testnet AND regtest")
+      elif config.use_testnet:
+         port = TESTNET_PORT
+      elif config.use_regtest:
+         port = REGTEST_PORT
+
       address = BITCOIND_ADDRESS_TEMPLATE.format(config.bitcoind_user, config.bitcoind_pass, port)
 
       self.client = AuthServiceProxy(address)

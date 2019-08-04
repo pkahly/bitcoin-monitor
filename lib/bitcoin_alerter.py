@@ -35,7 +35,7 @@ def _run():
 
          previous_info = info
          info_collector.write_info(info)
-      elif previous_info == None or (datetime.now() - previous_info.last_status_time) > timedelta(hours=config.status_frequency_in_hours):
+      elif previous_info == None or (datetime.now() - previous_info.status_time) > timedelta(hours=config.status_frequency_in_hours):
          # Send status
          status_string = status.get_status(previous_info, info)
          
@@ -44,7 +44,7 @@ def _run():
          previous_info = info
          info_collector.write_info(info)
       else:
-         td = timedelta(hours=config.status_frequency_in_hours) - (datetime.now() - previous_info.last_status_time)
+         td = timedelta(hours=config.status_frequency_in_hours) - (datetime.now() - previous_info.status_time)
          hours, minutes, seconds = time_tools.seconds_to_hms(td.seconds)
          print("No alerts. Next status email in: {}:{}:{}".format(hours, minutes, seconds))
 

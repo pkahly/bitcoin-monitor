@@ -16,6 +16,8 @@ class Config:
 
       self.bitcoind_user = "alerterbot"
       self.bitcoind_pass = "DO_NOT_USE_76cf8e3a30fb29b4131a8babb"
+      self.use_testnet = False
+      self.use_regtest = False
       
       self.minutes_to_sleep = 5
       self.status_frequency_in_hours = 4
@@ -62,6 +64,9 @@ def _read_config():
 
       config.bitcoind_user = config_file["bitcoind_user"]
       config.bitcoind_pass = config_file["bitcoind_pass"]
+      
+      config.use_testnet = config_file["use_testnet"]
+      config.use_regtest = config_file["use_regtest"]
          
       config.minutes_to_sleep = config_file["minutes_to_sleep"]
       config.status_frequency_in_hours = config_file["status_frequency_in_hours"]
