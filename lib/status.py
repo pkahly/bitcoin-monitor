@@ -14,9 +14,12 @@ def get_status(previous_info, info):
    statuses.append("Difficulty: {}".format(info.difficulty))
    statuses.append("Network Hash Rate: {} ( {:.2f} % )".format(info.network_hash_rate, info.hash_rate_percent_change))
    
-   statuses.append("Average time between blocks in last day: {:.2f} min".format(info.daily_avg))
-   statuses.append("Average time between blocks in last week: {:.2f} min".format(info.weekly_avg))
-   statuses.append("Average time between blocks in last month: {:.2f} min".format(info.monthly_avg))
+   statuses.append("")
+   
+   statuses.append("Average time between blocks")
+   statuses.append("Last day: {:.2f} min".format(info.daily_avg))
+   statuses.append("Last week: {:.2f} min".format(info.weekly_avg))
+   statuses.append("Last month: {:.2f} min".format(info.monthly_avg))
    
    statuses.append("")
    
