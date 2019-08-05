@@ -12,6 +12,10 @@ def get_status(previous_info, info):
    statuses.append("")
    
    statuses.append("Difficulty: {}".format(info.difficulty))
+   statuses.append("Blocks until next difficulty adjustment: {:,}".format(info.blocks % 2016))
+   
+   statuses.append("")
+   
    statuses.append("Network Hash Rate: {} ( {:.2f} % )".format(info.network_hash_rate, info.hash_rate_percent_change))
    
    statuses.append("")
