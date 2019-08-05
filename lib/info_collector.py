@@ -77,7 +77,7 @@ def get_info(previous_info):
    info.days_till_halving = info.blocks_till_halving / BLOCKS_PER_DAY
 
    info.remaining_coins = MAX_COINS - info.total_coins   
-   info.coins_mined_percent = round((info.total_coins / MAX_COINS) * 100, 2)
+   info.coins_mined_percent = (info.total_coins / MAX_COINS) * 100
       
    return info
    
