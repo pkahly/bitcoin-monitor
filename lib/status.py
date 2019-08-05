@@ -31,7 +31,8 @@ def get_status(previous_info, info):
    statuses.append("")
    
    statuses.append("Price: ${:,.2f} ( {:.2f} % )".format(info.price, info.price_percent_change))
-   statuses.append("Market Cap: ${:,.0f}".format(info.total_coins * info.price))
+   market_cap_str = price_history.to_human_readable_large_number(info.total_coins * info.price)
+   statuses.append("Market Cap: ${}".format(market_cap_str))
 
    statuses.append("")
    
