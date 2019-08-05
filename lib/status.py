@@ -23,7 +23,8 @@ def get_status(previous_info, info):
    
    statuses.append("")
    
-   statuses.append("Total Coins Mined: {:,.0f}".format(info.total_coins))
+   statuses.append("Total Coins Mined: {:,.0f} ( {:.2f} % )".format(info.total_coins, info.coins_mined_percent))
+   statuses.append("Remaining Coins: {:,.0f}".format(info.remaining_coins))   
    statuses.append("Current Reward: {}".format(info.reward))
    statuses.append("Blocks Until Next Halving: {:,.0f} ( ~{:,.0f} days )".format(info.blocks_till_halving, info.days_till_halving))
 

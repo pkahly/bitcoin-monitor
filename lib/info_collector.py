@@ -7,6 +7,7 @@ from lib import reorg, price_history, bitcoin_node_api
 
 HALVING_RATE = 210000 # mining reward halves after this many blocks
 INITIAL_REWARD = 50.0
+MAX_COINS = 21000000
 
 BLOCKS_PER_DAY = 144 # 6 per hour * 24 hours per day
 BLOCKS_PER_WEEK = 1008 # 144 * 7
@@ -74,6 +75,9 @@ def get_info(previous_info):
    info.total_coins += info.reward * remaining_blocks
    info.blocks_till_halving = HALVING_RATE - remaining_blocks
    info.days_till_halving = info.blocks_till_halving / BLOCKS_PER_DAY
+
+   info.remaining_coins = MAX_COINS - info.total_coins   
+   info.coins_mined_percent = round((info.total_coins / MAX_COINS) * 100, 2)
       
    return info
    
