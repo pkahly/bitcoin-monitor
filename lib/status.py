@@ -11,12 +11,10 @@ def get_status(previous_info, info):
    
    statuses.append("")
    
-   statuses.append("Difficulty: {}".format(info.difficulty))
+   statuses.append("Difficulty: {:,.0f}".format(info.difficulty))
+   network_hash_str = price_history.to_human_readable_large_number(info.network_hash_rate, price_history.HASHES_WORD_DICT)
+   statuses.append("Network Hash Rate: {} ( {:.2f} % )".format(network_hash_str, info.hash_rate_percent_change))
    statuses.append("Blocks until next difficulty adjustment: {:,}".format(info.blocks % 2016))
-   
-   statuses.append("")
-   
-   statuses.append("Network Hash Rate: {} ( {:.2f} % )".format(info.network_hash_rate, info.hash_rate_percent_change))
    
    statuses.append("")
    
@@ -35,7 +33,7 @@ def get_status(previous_info, info):
    statuses.append("")
    
    statuses.append("Price: ${:,.2f} ( {:.2f} % )".format(info.price, info.price_percent_change))
-   market_cap_str = price_history.to_human_readable_large_number(info.total_coins * info.price)
+   market_cap_str = price_history.to_human_readable_large_number(info.total_coins * info.price, price_history.NUMBER_WORD_DICT)
    statuses.append("Market Cap: ${}".format(market_cap_str))
 
    statuses.append("")

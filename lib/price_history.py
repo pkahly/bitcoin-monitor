@@ -1,6 +1,6 @@
 from datetime import datetime
 
-commas_to_word = {
+NUMBER_WORD_DICT = {
    0: "",
    1: "thousand",
    2: "million",
@@ -9,19 +9,30 @@ commas_to_word = {
    5: "quadrillion"
 }
 
+HASHES_WORD_DICT = {
+   0: "H/s",
+   1: "KH/s",
+   2: "MH/s",
+   3: "GH/s",
+   4: "TH/s",
+   5: "PH/s",
+   6: "EH/s",
+   7: "ZH/s"
+}
+
 def percent_change(start, end):
    start = float(start)
    end = float(end)
    return (end - start) / start * 100
    
-def to_human_readable_large_number(number):
+def to_human_readable_large_number(number, word_dict):
    num_commas = 0
    while number >= 1000:
       number /= 1000
       num_commas += 1
       
    number = round(number, 2)
-   word = commas_to_word[num_commas]
+   word = word_dict[num_commas]
    return "{} {}".format(number, word)
 
 def get_historical_price(cursor, years_ago):
