@@ -1,6 +1,9 @@
 from bitcoinrpc.authproxy import AuthServiceProxy
 from lib import config_reader
 
+# TODO remove after adding documentation
+# Had luck running with -rpcuser=alerterbot -rpcpassword=DO_NOT_USE_76cf8e3a30fb29b4131a8babb -rpcbind=127.0.0.1:8332 -rpcallowip=127.0.0.1
+
 BITCOIND_ADDRESS_TEMPLATE = "http://{}:{}@127.0.0.1:{}"
 MAINNET_PORT = 8332
 TESTNET_PORT = 18332
@@ -48,3 +51,19 @@ class BitcoinAPIClient:
 
       block_stats = self.client.getblockstats(block_height, [stat])
       return block_stats[stat]
+      
+   def get_transaction(self, transaction_id):
+      raw_tx = self.client.getrawtransaction(transaction_id)
+      return self.client.decoderawtransaction(raw_tx)
+      
+   def get_block_containing_transaction(self, transaction_id):
+      raw_tx = self.client.getrawtransaction(transaction_id, True) # verbose
+      block_hash = raw_tx["blockhash"]
+      return self.client.getblock(block_hash)
+      
+   def get_verbose_block(self, height):
+      block_hash = self.client.getblockhash(height)
+      return self.client.getblock(block_hash, True) #verbose
+      
+   def get_utxo(self, tx_id, vout):
+      return self.client.gettxout(tx_id, vout)

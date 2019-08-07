@@ -2,3 +2,4 @@ bitcoin.db
 config.json
 daily_history.csv
 lib/__pycache__
+experimental/__pycache__
