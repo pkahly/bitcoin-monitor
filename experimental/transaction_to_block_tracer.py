@@ -24,7 +24,6 @@ just_found_blocks = set()
 previous_depth = -1
 
 visited = set()
-skipped = 0
 
 while tx_queue:
    depth, tx_id = tx_queue.popleft()
@@ -54,8 +53,6 @@ while tx_queue:
          if not childtx_id in visited:
             visited.add(childtx_id)
             tx_queue.append((depth + 1, childtx_id))
-         else:
-            skipped += 1
          
    
 print()

@@ -61,9 +61,9 @@ class BitcoinAPIClient:
       block_hash = raw_tx["blockhash"]
       return self.client.getblock(block_hash)
       
-   def get_verbose_block(self, height):
+   def get_block(self, height):
       block_hash = self.client.getblockhash(height)
-      return self.client.getblock(block_hash, True) #verbose
+      return self.client.getblock(block_hash)
       
    def get_utxo(self, tx_id, vout):
       return self.client.gettxout(tx_id, vout)
