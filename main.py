@@ -9,12 +9,17 @@ parser = argparse.ArgumentParser(description='Tools for sending status and alert
 parser.add_argument('--run',
                        action='store_true',
                        help='run the alerter')
+
 parser.add_argument('--install',
                        action='store_true',
-                       help='create the database and populate with historical prices and blocks')
+                       help='create the database and populate with block info')
+parser.add_argument('--import_price_history',
+                       action='store_true',
+                       help='populate database with historical prices')
 parser.add_argument('--uninstall',
                        action='store_true',
                        help='dump the database tables')                       
+
 parser.add_argument('--print_blocks',
                        action='store_true',
                        help='Print the contents of the blocks database')
@@ -30,8 +35,9 @@ args = parser.parse_args()
 
 if args.install:
    install.install()
-   install.import_historical_prices()
    install.add_blocks()
+elif args.import_price_history:
+   install.import_historical_prices()
 elif args.uninstall:
    install.uninstall()
 elif args.run:
