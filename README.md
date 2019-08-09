@@ -32,28 +32,51 @@
 
 - Run a full Bitcoin node. https://bitcoincore.org/
 
-- Run main.py
+- Install the alerter. This will create a database of block info.
+```
+./main.py --install
+```
 
-- Open the install menu and select "Install Alerter"
+- *Optional* Import Historical Price Data.
+```
+./main.py --import_price_history
+```
 
-- *Optional* Still in the install menu, select "Import Historical Price Data" This will look for daily_history.csv in the current directory. The required format is as follows:
+This will look for daily_history.csv in the current directory. The required format is as follows:
 ```
 <Date>,<open>,<high>,<low>,<close>,<volume>,<market cap>
+```
+
 Example row:
+```
 Jul192019,10653.96,10716.98,10229.63,10530.73,20727426310,187725578628
 ```
 
-- *Optional* Still in the install menu, run "Store Block Info". This will take a while.
-
-- Create config.json. Format:
+- Edit the default config.json that was created automatically during the install. Format:
 ```
 {
-"SERVER": <server>,
-"PORT": <port>,
-"BOT_EMAIL": <email>,
-"BOT_PASSWORD": <pass>,
-"HUMAN_EMAIL": <your email>
+"enable_emails": false, 
+"server": "", 
+"port": "", 
+"bot_email": "", 
+"bot_password": "", 
+"human_email": "", 
+"bitcoind_user": "alerterbot", 
+"bitcoind_pass": "DO_NOT_USE_76cf8e3a30fb29b4131a8babb", 
+"use_testnet": false, 
+"use_regtest": true, 
+"minutes_to_sleep": 5, 
+"status_frequency_in_hours": 0, 
+"historical_price_filename": "daily_history.csv", 
+"catch_errors": false, 
+"block_reorg_threshold": 0, 
+"minutes_between_blocks_threshold": 90, 
+"price_percent_change_threshold": 5, 
+"reorg_depth_cap": 5
 }
 ```
 
-- Back in the main menu, select "Run the Bitcoin Alerter"
+- Start the Bitcoin Alerter
+```
+./main.py --run
+```
