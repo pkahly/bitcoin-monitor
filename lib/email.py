@@ -7,6 +7,11 @@ def send_email(subject, message):
    config = config_reader.get_config()
    dt = datetime.today()
    
+   if config.use_testnet:
+      subject = "[TESTNET] " + subject
+   elif config.use_regtest:
+      subject = "[REGTEST] " + subject
+   
    email_text = "Subject: {} {}\n\n{}".format(subject, dt.strftime("%m-%d"), message)
 
    if config.enable_emails:
