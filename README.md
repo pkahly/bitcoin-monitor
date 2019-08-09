@@ -30,16 +30,16 @@
 
 ### Set Up Instructions:
 
-- Run a full Bitcoin node. https://bitcoincore.org/
+#### Run a full Bitcoin node. https://bitcoincore.org/
 
-- Install sqlite3 and python-bitcoinrpc
+#### Install sqlite3 and python-bitcoinrpc
 
-- Install the alerter. This will create a database of block info.
+#### Install the alerter. This will create a database of block info.
 ```
 ./main.py --install
 ```
 
-- *Optional* Import Historical Price Data.
+#### *Optional* Import Historical Price Data.
 ```
 ./main.py --import_price_history
 ```
@@ -54,7 +54,7 @@ Example row:
 Jul192019,10653.96,10716.98,10229.63,10530.73,20727426310,187725578628
 ```
 
-- Edit the default config.json that was created automatically during the install. Format:
+#### Edit the default config.json that was created automatically during the install. Format:
 ```
 {
 "enable_emails": false, 
@@ -80,7 +80,7 @@ Jul192019,10653.96,10716.98,10229.63,10530.73,20727426310,187725578628
 To receive emails, you must set *enable_emails* to true and provide values for *server*, *port*, *bot_email*, *bot_password* and *human_email*. Otherwise, output will only be logged to standard out.
 The use_testnet or use_regtest options can be used for testing this with a testnet or regtest Bitcoin node.
 
-- Start the Bitcoin Alerter
+#### Start the Bitcoin Alerter
 ```
 ./main.py --run
 ```
