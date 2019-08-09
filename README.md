@@ -64,17 +64,19 @@ Jul192019,10653.96,10716.98,10229.63,10530.73,20727426310,187725578628
 "bitcoind_user": "alerterbot", 
 "bitcoind_pass": "DO_NOT_USE_76cf8e3a30fb29b4131a8babb", 
 "use_testnet": false, 
-"use_regtest": true, 
+"use_regtest": false, 
 "minutes_to_sleep": 5, 
-"status_frequency_in_hours": 0, 
+"status_frequency_in_hours": 6, 
 "historical_price_filename": "daily_history.csv", 
-"catch_errors": false, 
+"catch_errors": true, 
 "block_reorg_threshold": 0, 
 "minutes_between_blocks_threshold": 90, 
 "price_percent_change_threshold": 5, 
 "reorg_depth_cap": 5
 }
 ```
+To receive emails, you must set *enable_emails* to true and provide values for *server*, *port*, *bot_email*, *bot_password* and *human_email*. Otherwise, output will only be logged to standard out.
+The use_testnet or use_regtest options can be used for testing this with a testnet or regtest Bitcoin node.
 
 - Start the Bitcoin Alerter
 ```
