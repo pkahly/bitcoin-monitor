@@ -32,6 +32,8 @@
 
 - Run a full Bitcoin node. https://bitcoincore.org/
 
+- Install sqlite3 and python-bitcoinrpc
+
 - Install the alerter. This will create a database of block info.
 ```
 ./main.py --install
