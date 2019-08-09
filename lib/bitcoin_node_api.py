@@ -1,8 +1,7 @@
 from bitcoinrpc.authproxy import AuthServiceProxy
 from lib import config_reader
 
-# TODO remove after adding documentation
-# Had luck running with -rpcuser=alerterbot -rpcpassword=DO_NOT_USE_76cf8e3a30fb29b4131a8babb -rpcbind=127.0.0.1:8332 -rpcallowip=127.0.0.1
+# Had luck running bitcoind with -rpcuser=alerterbot -rpcpassword=DO_NOT_USE_76cf8e3a30fb29b4131a8babb -rpcbind=127.0.0.1:8332 -rpcallowip=127.0.0.1
 
 BITCOIND_ADDRESS_TEMPLATE = "http://{}:{}@127.0.0.1:{}"
 MAINNET_PORT = 8332

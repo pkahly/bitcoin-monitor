@@ -20,7 +20,7 @@ class Config:
       self.use_regtest = False
       
       self.minutes_to_sleep = 5
-      self.status_frequency_in_hours = 4
+      self.status_frequency_in_hours = 6
       self.historical_price_filename = 'daily_history.csv'
       self.catch_errors = True
       
