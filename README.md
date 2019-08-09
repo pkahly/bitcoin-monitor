@@ -80,8 +80,8 @@ Jul192019,10653.96,10716.98,10229.63,10530.73,20727426310,187725578628
 "reorg_depth_cap": 5
 }
 ```
-To receive emails, you must set *enable_emails* to true and provide values for *server*, *port*, *bot_email*, *bot_password* and *human_email*. Otherwise, output will only be logged to standard out.
-The use_testnet or use_regtest options can be used for testing this with a testnet or regtest Bitcoin node.
+- To receive emails, you must set *enable_emails* to true and provide values for *server*, *port*, *bot_email*, *bot_password* and *human_email*. Otherwise, output will only be logged to standard out.
+- The use_testnet or use_regtest options can be used for testing this with a testnet or regtest Bitcoin node.
 
 #### Start the Bitcoin Alerter
 ```
