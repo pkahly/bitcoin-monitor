@@ -8,7 +8,7 @@ from lib import bitcoin_node_api
 client = bitcoin_node_api.BitcoinAPIClient()
 
 max_height = client.get_num_blocks()
-height = 100000
+height = max_height#1
 
 while height < max_height:
    current_block = client.get_block(height)
@@ -42,4 +42,4 @@ while height < max_height:
    
    print("Average TX Age: {:.0f}".format(average_age))
    time.sleep(1)
-   height += 1
+   height -= 1#+= 1
