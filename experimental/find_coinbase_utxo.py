@@ -10,7 +10,7 @@ blocks = set()
 coins = 0
 
 max_height = client.get_num_blocks()
-height = 100000#1
+height = 1
 
 while height < max_height:
    coinbase_tx_id = client.get_block(height)["tx"][0]
@@ -34,22 +34,5 @@ while height < max_height:
       blocks.add(height)
       coins += value
       print("{} {:,.2f}".format(height, coins))
-   
-   height += 1
-
-from collections import deque
-from lib import bitcoin_node_api
-
-
-client = bitcoin_node_api.BitcoinAPIClient()
-
-max_height = client.get_num_blocks()
-height = 0
-
-while height < max_height:
-   coinbase_tx = client.get_verbose_block(height)["tx"][0]
-   
-   if client.is_unspent(coinbase_tx, 0):
-      print(height)
    
    height += 1
