@@ -12,7 +12,7 @@ MAX_COINS = 21000000
 BLOCKS_PER_DAY = 144 # 6 per hour * 24 hours per day
 BLOCKS_PER_WEEK = 1008 # 144 * 7
 BLOCKS_PER_MONTH = 4032 # 1008 * 4
-
+DIFFICULTY_PERIOD = 2016
 
 class Info:
    def __init__(self):
@@ -39,6 +39,9 @@ def get_info(previous_info):
    mining_info = bitcoin_client.get_mining_info()
    info.difficulty = mining_info["difficulty"]
    info.network_hash_rate = mining_info["networkhashps"]
+   
+   blocks_since_difficulty_adjustment = info.blocks % DIFFICULTY_PERIOD
+   info.blocks_till_difficulty_adjustment = DIFFICULTY_PERIOD - blocks_since_difficulty_adjustment
    
    info.difficulty_percent_change = 0
    info.hash_rate_percent_change = 0
