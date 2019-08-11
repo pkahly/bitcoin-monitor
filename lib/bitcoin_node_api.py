@@ -43,6 +43,9 @@ class BitcoinAPIClient:
    def get_mining_info(self):
       return self.client.getmininginfo()
       
+   def get_network_hashrate(self, num_blocks):
+      return self.client.getnetworkhashps(num_blocks)
+      
       
    def get_blockstats(self, block_height, stat):
       if block_height < 0:

@@ -38,7 +38,7 @@ def get_info(previous_info):
    
    mining_info = bitcoin_client.get_mining_info()
    info.difficulty = mining_info["difficulty"]
-   info.network_hash_rate = mining_info["networkhashps"]
+   info.network_hash_rate = bitcoin_client.get_network_hashrate(BLOCKS_PER_DAY)
    
    blocks_since_difficulty_adjustment = info.blocks % DIFFICULTY_PERIOD
    info.blocks_till_difficulty_adjustment = DIFFICULTY_PERIOD - blocks_since_difficulty_adjustment
