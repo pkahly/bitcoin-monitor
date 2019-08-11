@@ -4,33 +4,33 @@
 
 ### Sample status contents:
 ```
-Blocks: 589,416 ( + 33 )
-Last Block Time: 08-09 10:49 PM
-Minutes Since Last Block: 5
+Blocks: 589,515 ( + 31 )
+Last Block Time: 08-10 02:55 PM
+Minutes Since Last Block: 7
 
-Difficulty: 9,985,348,008,060
-Network Hash Rate: 71.74 EH/s ( 1.09 % )
-Blocks until next difficulty adjustment: 744
+Difficulty: 9985348008059.555
+Network Hash Rate: 72.70 EH/s ( 0.90 % )
+Blocks until next difficulty adjustment: 1,173
 
 Average time between blocks
-Last day: 9.86 min
-Last week: 9.28 min
+Last day: 9.55 min
+Last week: 9.54 min
 Last month: 9.45 min
 
-Total Coins Mined: 17,867,712 ( 85.08 % )
-Remaining Coins: 3,132,288
+Total Coins Mined: 17,868,950 ( 85.09 % )
+Remaining Coins: 3,131,050
 Current Reward: 12.5
-Blocks Until Next Halving: 40,583 ( ~282 days )
+Blocks Until Next Halving: 40,484 ( ~281 days )
 
-Price: $11,801.51 ( -0.79 % )
-Market Cap: $210.87 billion
+Price: $11,344.34 ( -0.30 % )
+Market Cap: $202.71 billion
 
 Historical Prices:
-2018-08-09 :  $6,568.23      79.68 %
-2017-08-09 :  $3,342.47     253.08 %
-2016-08-09 :    $587.80    1907.74 %
-2015-08-09 :    $265.08    4352.06 %
-2014-08-09 :    $589.37    1902.39 %
+2018-08-10 :  $6,184.71      83.43 %
+2017-08-10 :  $3,381.28     235.50 %
+2016-08-10 :    $592.10    1815.95 %
+2015-08-10 :    $264.47    4189.46 %
+2014-08-10 :    $591.06    1819.32 %
 ```
 
 ### Set Up Instructions:
