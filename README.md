@@ -1,5 +1,7 @@
 #### Note: Still under construction -- needs productionized, automated tests, etc. See open issues.
 
+*Developed primarily for my own use, but feedback and contributions are welcome*
+
 ## Monitors a full Bitcoin node and sends status emails and alerts.
 
 ### Sample status contents:
