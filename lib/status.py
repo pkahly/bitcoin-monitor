@@ -6,7 +6,6 @@ def get_status(previous_info, info):
    statuses = []
 
    statuses.append("Blocks: {:,} ( + {} )".format(info.blocks, info.new_blocks))
-   statuses.append("Last Block Time: {}".format(info.last_block_time.strftime("%m-%d %I:%M %p")))
    statuses.append("Minutes Since Last Block: {}".format(info.num_minutes))
    
    statuses.append("")

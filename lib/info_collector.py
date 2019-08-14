@@ -32,8 +32,8 @@ def get_info(previous_info):
    if previous_info != None:
       info.new_blocks = info.blocks - previous_info.blocks
       
-   info.last_block_time = datetime.fromtimestamp(bitcoin_client.get_blockstats(info.blocks, "time"))
-   block_time_delta = datetime.now() - info.last_block_time
+   last_block_time = datetime.fromtimestamp(bitcoin_client.get_blockstats(info.blocks, "time"))
+   block_time_delta = datetime.now() - last_block_time
    info.num_minutes = round(block_time_delta.total_seconds() / 60)
    
    mining_info = bitcoin_client.get_mining_info()
