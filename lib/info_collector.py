@@ -24,6 +24,7 @@ def get_info(previous_info):
    bitcoin_client = bitcoin_node_api.BitcoinAPIClient()
    config = config_reader.get_config()
    
+   # Blocks and Headers
    info.blocks = bitcoin_client.get_num_blocks()
    headers = bitcoin_client.get_num_headers()
    if info.blocks != headers:
@@ -37,6 +38,7 @@ def get_info(previous_info):
    block_time_delta = datetime.now() - last_block_time
    info.num_minutes = round(block_time_delta.total_seconds() / 60)
    
+   # Difficulty and Hash Rate
    mining_info = bitcoin_client.get_mining_info()
    info.difficulty = mining_info["difficulty"]
    info.network_hash_rate = bitcoin_client.get_network_hashrate(config.network_hash_duration)
@@ -50,16 +52,19 @@ def get_info(previous_info):
       info.difficulty_percent_change = price_history.percent_change(previous_info.difficulty, info.difficulty)
       info.hash_rate_percent_change = price_history.percent_change(previous_info.network_hash_rate, info.network_hash_rate)
    
+   # Average Block Time
    info.daily_avg = get_average_block_time(bitcoin_client, info.blocks, BLOCKS_PER_DAY)
    info.weekly_avg = get_average_block_time(bitcoin_client, info.blocks, BLOCKS_PER_WEEK)
    info.monthly_avg = get_average_block_time(bitcoin_client, info.blocks, BLOCKS_PER_MONTH)
    
+   # Reorg Detection
    reorg_info = reorg.add_blocks(bitcoin_client)
    highest_stored_block = reorg_info["highest_stored_block"]
    last_matching_height = reorg_info["last_matching_height"]
    
    info.reorg_length = highest_stored_block - last_matching_height
 
+   # Current Price
    priceResponse = requests.get("https://api.cryptowat.ch/markets/gdax/btcusd/price")
    info.price = priceResponse.json()['result']['price']
    
@@ -67,6 +72,7 @@ def get_info(previous_info):
    if previous_info != None:
        info.price_percent_change = price_history.percent_change(previous_info.price, info.price)
    
+   # Reward and Halving
    info.reward = INITIAL_REWARD
    info.total_coins = 0
    remaining_blocks = info.blocks + 1 # Add one because blocks is 0-based
@@ -80,6 +86,7 @@ def get_info(previous_info):
    info.blocks_till_halving = HALVING_RATE - remaining_blocks
    info.days_till_halving = info.blocks_till_halving / BLOCKS_PER_DAY
 
+   # Remaining Supply
    info.remaining_coins = MAX_COINS - info.total_coins   
    info.coins_mined_percent = (info.total_coins / MAX_COINS) * 100
       
