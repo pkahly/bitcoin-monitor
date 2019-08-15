@@ -33,7 +33,6 @@ def _run():
          send_alert(previous_info, info, alert_list)
       
       elif time_tools.should_send_daily_summary(config, previous_info.status_time, datetime.now()):
-         # TODO determine if we should send a daily summary
          send_daily_summary()
       
       elif (datetime.now() - previous_info.status_time) > timedelta(hours=config.status_frequency_in_hours):

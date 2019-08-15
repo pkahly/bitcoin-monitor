@@ -46,12 +46,24 @@ def get_status(previous_info, info):
 def get_daily_summary(previous_info, info):
    statuses = []
    
+   # Duration since previous_info, ideally 24 hours
+   # TODO change format
    statuses.append("Difference Since: {}".format(previous_info.status_time))
    statuses.append("")
    
+   # Add the common status items
    _add_status(statuses, previous_info, info)
    statuses.append("")
    
+   # Add Max and Min Hashrate
+   max_hashrate_str = price_history.to_human_readable_large_number(info.max_hash_rate, price_history.HASHES_WORD_DICT)
+   min_hashrate_str = price_history.to_human_readable_large_number(info.min_hash_rate, price_history.HASHES_WORD_DICT)
+   statuses.append("All Time High Hash Rate: {}".format(max_hashrate_str))
+   statuses.append("Lowest Recent Hash Rate: {}".format(min_hashrate_str))
+   statuses.append("")
+   
+   # Add Historical Prices
+   # TODO move to function
    connection = sqlite3.connect("bitcoin.db")
    cursor = connection.cursor()
    
