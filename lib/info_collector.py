@@ -38,19 +38,26 @@ def get_info(previous_info):
    block_time_delta = datetime.now() - last_block_time
    info.num_minutes = round(block_time_delta.total_seconds() / 60)
    
-   # Difficulty and Hash Rate
+   # Difficulty
    mining_info = bitcoin_client.get_mining_info()
    info.difficulty = mining_info["difficulty"]
-   info.network_hash_rate = bitcoin_client.get_network_hashrate(config.network_hash_duration)
    
    blocks_since_difficulty_adjustment = info.blocks % DIFFICULTY_PERIOD
    info.blocks_till_difficulty_adjustment = DIFFICULTY_PERIOD - blocks_since_difficulty_adjustment
    
    info.difficulty_percent_change = 0
-   info.hash_rate_percent_change = 0
    if previous_info != None:
       info.difficulty_percent_change = price_history.percent_change(previous_info.difficulty, info.difficulty)
+   
+   # Hash Rate
+   info.network_hash_rate = bitcoin_client.get_network_hashrate(config.network_hash_duration)
+   
+   info.hash_rate_percent_change = 0
+   info.max_hash_rate = info.network_hash_rate
+   if previous_info != None:
       info.hash_rate_percent_change = price_history.percent_change(previous_info.network_hash_rate, info.network_hash_rate)
+      info.max_hash_rate = reorg.get_max_hashrate(previous_info.blocks)
+      info.min_hash_rate = reorg.get_min_hashrate(previous_info.blocks - config.local_min_hashrate_blocks, previous_info.blocks)
    
    # Average Block Time
    info.daily_avg = get_average_block_time(bitcoin_client, info.blocks, BLOCKS_PER_DAY)

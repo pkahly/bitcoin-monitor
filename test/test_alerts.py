@@ -26,6 +26,18 @@ class TestAlerts(unittest.TestCase):
       alert_list = alerts.get_alerts(self.previous_info, self.info)
       self.assertTrue('WARNING: Price change of 1000.00 %' in alert_list)
       
+   def test_max_hashrate(self):
+      self.info.network_hash_rate = 20
+      self.info.max_hash_rate = 10
+      alert_list = alerts.get_alerts(self.previous_info, self.info)
+      self.assertTrue('WARNING: Above Maximum Hash Rate: 20 H/s > 10 H/s' in alert_list)
+      
+   def test_min_hashrate(self):
+      self.info.network_hash_rate = 5
+      self.info.min_hash_rate = 10
+      alert_list = alerts.get_alerts(self.previous_info, self.info)
+      self.assertTrue('WARNING: Below Local Minimum Hash Rate: 5 H/s < 10 H/s' in alert_list)
+      
    def _get_default_info(self):
       info = info_collector.Info()
       info.num_minutes = 0
@@ -33,4 +45,7 @@ class TestAlerts(unittest.TestCase):
       info.difficulty_percent_change = 0
       info.reorg_length = 0
       info.price_percent_change = 0
+      info.network_hash_rate = 10
+      info.max_hash_rate = 20
+      info.min_hash_rate = 5
       return info

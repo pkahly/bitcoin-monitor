@@ -11,6 +11,33 @@ def get_highest_stored_block(cursor):
    else:
       return result[0]
 
+
+def get_max_hashrate(end_height):
+   connection = sqlite3.connect("bitcoin.db")
+   cursor = connection.cursor()
+   
+   cursor.execute("SELECT networkhashps FROM block_info where height <= {} ORDER BY networkhashps DESC limit 1".format(int(end_height)))
+   result = cursor.fetchone()
+   
+   if result == None:
+      return -1
+   else:
+      return result[0]
+
+
+def get_min_hashrate(start_height, end_height):
+   connection = sqlite3.connect("bitcoin.db")
+   cursor = connection.cursor()
+   
+   cursor.execute("SELECT networkhashps FROM block_info where height >= {} and height <= {} ORDER BY networkhashps ASC limit 1".format(int(start_height), int(end_height)))
+   result = cursor.fetchone()
+   
+   if result == None:
+      return -1
+   else:
+      return result[0]
+
+
 def get_stored_hash(cursor, height):
    cursor.execute("SELECT hash FROM block_info where height = {}".format(int(height)))
    return cursor.fetchone()[0]

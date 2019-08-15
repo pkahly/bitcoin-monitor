@@ -28,7 +28,9 @@ class Config:
       self.minutes_between_blocks_threshold = 90
       self.price_percent_change_threshold = 5
       self.reorg_depth_cap = 5
+      
       self.network_hash_duration = 144
+      self.local_min_hashrate_blocks = 10000
    
 
 def get_config():
@@ -78,7 +80,9 @@ def _read_config():
       config.minutes_between_blocks_threshold = _get_config_param_or_use_default(config, config_file, "minutes_between_blocks_threshold")
       config.price_percent_change_threshold = _get_config_param_or_use_default(config, config_file, "price_percent_change_threshold")
       config.reorg_depth_cap = _get_config_param_or_use_default(config, config_file, "reorg_depth_cap")
+      
       config.network_hash_duration = _get_config_param_or_use_default(config, config_file, "network_hash_duration")
+      config.local_min_hashrate_blocks = _get_config_param_or_use_default(config, config_file, "local_min_hashrate_blocks")
          
       return config
       
