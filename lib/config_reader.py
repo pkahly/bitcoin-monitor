@@ -28,6 +28,7 @@ class Config:
       self.minutes_between_blocks_threshold = 90
       self.price_percent_change_threshold = 5
       self.reorg_depth_cap = 5
+      self.network_hash_duration = 144
    
 
 def get_config():
@@ -53,29 +54,37 @@ def _read_config():
       config_file = json.load(json_file)
       config = Config()
       
-      config.enable_emails = config_file["enable_emails"]
+      config.enable_emails = _get_config_param_or_use_default(config, config_file, "enable_emails")
       
       if config.enable_emails:
-         config.server = config_file["server"]
-         config.port = config_file["port"]
-         config.bot_email = config_file["bot_email"]
-         config.bot_password = config_file["bot_password"]
-         config.human_email = config_file["human_email"]
+         config.server = _get_config_param_or_use_default(config, config_file, "server")
+         config.port = _get_config_param_or_use_default(config, config_file, "port")
+         config.bot_email = _get_config_param_or_use_default(config, config_file, "bot_email")
+         config.bot_password = _get_config_param_or_use_default(config, config_file, "bot_password")
+         config.human_email = _get_config_param_or_use_default(config, config_file, "human_email")
 
-      config.bitcoind_user = config_file["bitcoind_user"]
-      config.bitcoind_pass = config_file["bitcoind_pass"]
+      config.bitcoind_user = _get_config_param_or_use_default(config, config_file, "bitcoind_user")
+      config.bitcoind_pass = _get_config_param_or_use_default(config, config_file, "bitcoind_pass")
       
-      config.use_testnet = config_file["use_testnet"]
-      config.use_regtest = config_file["use_regtest"]
+      config.use_testnet = _get_config_param_or_use_default(config, config_file, "use_testnet")
+      config.use_regtest = _get_config_param_or_use_default(config, config_file, "use_regtest")
          
-      config.minutes_to_sleep = config_file["minutes_to_sleep"]
-      config.status_frequency_in_hours = config_file["status_frequency_in_hours"]
-      config.historical_price_filename = config_file["historical_price_filename"]
-      config.catch_errors = config_file["catch_errors"]
+      config.minutes_to_sleep = _get_config_param_or_use_default(config, config_file, "minutes_to_sleep")
+      config.status_frequency_in_hours = _get_config_param_or_use_default(config, config_file, "status_frequency_in_hours")
+      config.historical_price_filename = _get_config_param_or_use_default(config, config_file, "historical_price_filename")
+      config.catch_errors = _get_config_param_or_use_default(config, config_file, "catch_errors")
 
-      config.block_reorg_threshold = config_file["block_reorg_threshold"]
-      config.minutes_between_blocks_threshold = config_file["minutes_between_blocks_threshold"]
-      config.price_percent_change_threshold = config_file["price_percent_change_threshold"]
-      config.reorg_depth_cap = config_file["reorg_depth_cap"]
+      config.block_reorg_threshold = _get_config_param_or_use_default(config, config_file, "block_reorg_threshold")
+      config.minutes_between_blocks_threshold = _get_config_param_or_use_default(config, config_file, "minutes_between_blocks_threshold")
+      config.price_percent_change_threshold = _get_config_param_or_use_default(config, config_file, "price_percent_change_threshold")
+      config.reorg_depth_cap = _get_config_param_or_use_default(config, config_file, "reorg_depth_cap")
+      config.network_hash_duration = _get_config_param_or_use_default(config, config_file, "network_hash_duration")
          
       return config
+      
+      
+def _get_config_param_or_use_default(config, config_file, param):
+   if param in config_file:
+      return config_file [param]
+   else:
+      return getattr(config, param)

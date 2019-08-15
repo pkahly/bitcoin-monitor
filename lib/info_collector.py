@@ -2,7 +2,7 @@ import sqlite3
 import json
 import requests
 from datetime import datetime
-from lib import reorg, price_history, bitcoin_node_api
+from lib import reorg, price_history, bitcoin_node_api, config_reader
 
 
 HALVING_RATE = 210000 # mining reward halves after this many blocks
@@ -22,6 +22,7 @@ class Info:
 def get_info(previous_info):
    info = Info()
    bitcoin_client = bitcoin_node_api.BitcoinAPIClient()
+   config = config_reader.get_config()
    
    info.blocks = bitcoin_client.get_num_blocks()
    headers = bitcoin_client.get_num_headers()
@@ -38,7 +39,7 @@ def get_info(previous_info):
    
    mining_info = bitcoin_client.get_mining_info()
    info.difficulty = mining_info["difficulty"]
-   info.network_hash_rate = bitcoin_client.get_network_hashrate(BLOCKS_PER_DAY)
+   info.network_hash_rate = bitcoin_client.get_network_hashrate(config.network_hash_duration)
    
    blocks_since_difficulty_adjustment = info.blocks % DIFFICULTY_PERIOD
    info.blocks_till_difficulty_adjustment = DIFFICULTY_PERIOD - blocks_since_difficulty_adjustment

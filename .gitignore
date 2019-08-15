@@ -1,4 +1,5 @@
 bitcoin.db
+bitcoin.db-journal
 config.json
 daily_history.csv
 __pycache__

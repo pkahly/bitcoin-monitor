@@ -53,8 +53,9 @@ def add_blocks(bitcoin_client):
    # Store hashes of new blocks
    for height in reversed(range(last_matching_height + 1, num_blocks + 1)):
       hash = bitcoin_client.get_current_hash(height)
+      networkhashps = bitcoin_client.get_network_hashrate(config.network_hash_duration, height)
       
-      sql_command = "INSERT INTO block_info (height, hash)\nVALUES ({}, \"{}\");".format(height, hash)
+      sql_command = "INSERT INTO block_info (height, hash, networkhashps)\nVALUES ({}, \"{}\", {});".format(height, hash, networkhashps)
       cursor.execute(sql_command)
       
       if height % 100 == 0:

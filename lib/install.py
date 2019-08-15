@@ -26,7 +26,8 @@ def install():
    sql_command = """
    CREATE TABLE block_info (
    height INTEGER PRIMARY KEY,
-   hash TEXT
+   hash TEXT,
+   networkhashps REAL
    );"""
 
    cursor.execute(sql_command)
