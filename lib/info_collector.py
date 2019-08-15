@@ -114,11 +114,24 @@ def get_average_block_time(bitcoin_client, end_block, depth):
    
 def get_most_recent_info():
    connection = sqlite3.connect("bitcoin.db")
+   
    cursor = connection.cursor()
-   
    cursor.execute("SELECT timestamp, blocks, difficulty, network_hash_rate, price FROM status_info ORDER BY timestamp DESC limit 1")
-   result = cursor.fetchone()
    
+   return _info_from_query_result(cursor.fetchone())
+   
+   
+def get_closest_info_to_timestamp(timestamp):
+   "ORDER BY ABS( Area - 1.125 ) ASC LIMIT 1"
+   connection = sqlite3.connect("bitcoin.db")
+   
+   cursor = connection.cursor()
+   cursor.execute("SELECT timestamp, blocks, difficulty, network_hash_rate, price FROM status_info ORDER BY ABS( timestamp - {} ) ASC limit 1".format(int(timestamp)))
+   
+   return _info_from_query_result(cursor.fetchone())
+   
+   
+def _info_from_query_result(result):
    if result == None:
       return None
    
@@ -129,7 +142,6 @@ def get_most_recent_info():
    info.network_hash_rate = result[3]
    info.price = result[4]
    return info
-
 
 def write_info(info):
    connection = sqlite3.connect("bitcoin.db")
