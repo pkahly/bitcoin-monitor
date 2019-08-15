@@ -16,7 +16,6 @@ def _add_status(statuses, previous_info, info):
    
    statuses.append("Average time between blocks")
    statuses.append("Last day: {:.2f} min".format(info.daily_avg))
-   statuses.append("Last week: {:.2f} min".format(info.weekly_avg))
    statuses.append("Last month: {:.2f} min".format(info.monthly_avg))
    
    statuses.append("")

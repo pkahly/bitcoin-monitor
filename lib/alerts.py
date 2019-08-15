@@ -20,6 +20,9 @@ def get_alerts(previous_info, info):
       min_hashrate_str = price_history.to_human_readable_large_number(info.min_hash_rate, price_history.HASHES_WORD_DICT)
       alerts.append('WARNING: Below Local Minimum Hash Rate: {} < {}'.format(hashrate_str, min_hashrate_str))
       
+   if abs(info.daily_avg - 10) > 1:
+      alerts.append("WARNING: Unusual Block Time: {} min".format(info.daily_avg))
+      
    if info.reorg_length > config.block_reorg_threshold:
       alerts.append("WARNING: Block Reorg of {} blocks has occurred".format(info.reorg_length))
       

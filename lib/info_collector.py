@@ -10,7 +10,6 @@ INITIAL_REWARD = 50.0
 MAX_COINS = 21000000
 
 BLOCKS_PER_DAY = 144 # 6 per hour * 24 hours per day
-BLOCKS_PER_WEEK = 1008 # 144 * 7
 BLOCKS_PER_MONTH = 4032 # 1008 * 4
 DIFFICULTY_PERIOD = 2016
 
@@ -61,7 +60,6 @@ def get_info(previous_info):
    
    # Average Block Time
    info.daily_avg = get_average_block_time(bitcoin_client, info.blocks, BLOCKS_PER_DAY)
-   info.weekly_avg = get_average_block_time(bitcoin_client, info.blocks, BLOCKS_PER_WEEK)
    info.monthly_avg = get_average_block_time(bitcoin_client, info.blocks, BLOCKS_PER_MONTH)
    
    # Reorg Detection

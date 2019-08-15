@@ -38,6 +38,16 @@ class TestAlerts(unittest.TestCase):
       alert_list = alerts.get_alerts(self.previous_info, self.info)
       self.assertTrue('WARNING: Below Local Minimum Hash Rate: 5 H/s < 10 H/s' in alert_list)
       
+   def test_high_blocktime(self):
+      self.info.daily_avg = 12
+      alert_list = alerts.get_alerts(self.previous_info, self.info)
+      self.assertTrue('WARNING: Unusual Block Time: 12 min' in alert_list)
+      
+   def test_low_blocktime(self):
+      self.info.daily_avg = 8
+      alert_list = alerts.get_alerts(self.previous_info, self.info)
+      self.assertTrue('WARNING: Unusual Block Time: 8 min' in alert_list)
+      
    def _get_default_info(self):
       info = info_collector.Info()
       info.num_minutes = 0
@@ -48,4 +58,5 @@ class TestAlerts(unittest.TestCase):
       info.network_hash_rate = 10
       info.max_hash_rate = 20
       info.min_hash_rate = 5
+      info.daily_avg = 10
       return info
