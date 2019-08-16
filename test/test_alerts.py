@@ -9,7 +9,7 @@ class TestAlerts(unittest.TestCase):
    def test_blocks(self):
       self.info.num_minutes = 9999
       alert_list = alerts.get_alerts(self.previous_info, self.info)
-      self.assertTrue('WARNING: No blocks in 9999 minutes' in alert_list)
+      self.assertTrue('No blocks in 9999 minutes' in alert_list)
       
    def test_difficulty(self):
       self.info.difficulty_percent_change = 10
@@ -19,34 +19,34 @@ class TestAlerts(unittest.TestCase):
    def test_reorg(self):
       self.info.reorg_length = 100
       alert_list = alerts.get_alerts(self.previous_info, self.info)
-      self.assertTrue('WARNING: Block Reorg of 100 blocks has occurred' in alert_list)
+      self.assertTrue('Block Reorg of 100 blocks has occurred' in alert_list)
 
    def test_price(self):
       self.info.price_percent_change = 1000
       alert_list = alerts.get_alerts(self.previous_info, self.info)
-      self.assertTrue('WARNING: Price change of 1000.00 %' in alert_list)
+      self.assertTrue('Price change of 1000.00 %' in alert_list)
       
    def test_max_hashrate(self):
       self.info.network_hash_rate = 20
       self.info.max_hash_rate = 10
       alert_list = alerts.get_alerts(self.previous_info, self.info)
-      self.assertTrue('WARNING: Above Maximum Hash Rate: 20 H/s > 10 H/s' in alert_list)
+      self.assertTrue('Above Maximum Hash Rate: 20 H/s > 10 H/s' in alert_list)
       
    def test_min_hashrate(self):
       self.info.network_hash_rate = 5
       self.info.min_hash_rate = 10
       alert_list = alerts.get_alerts(self.previous_info, self.info)
-      self.assertTrue('WARNING: Below Local Minimum Hash Rate: 5 H/s < 10 H/s' in alert_list)
+      self.assertTrue('Below Local Minimum Hash Rate: 5 H/s < 10 H/s' in alert_list)
       
    def test_high_blocktime(self):
-      self.info.daily_avg = 12
+      self.info.daily_avg = 12.1
       alert_list = alerts.get_alerts(self.previous_info, self.info)
-      self.assertTrue('WARNING: Unusual Block Time: 12 min' in alert_list)
+      self.assertTrue('Unusual Block Time: 12.1 min' in alert_list)
       
    def test_low_blocktime(self):
-      self.info.daily_avg = 8
+      self.info.daily_avg = 7.9
       alert_list = alerts.get_alerts(self.previous_info, self.info)
-      self.assertTrue('WARNING: Unusual Block Time: 8 min' in alert_list)
+      self.assertTrue('Unusual Block Time: 7.9 min' in alert_list)
       
    def _get_default_info(self):
       info = info_collector.Info()

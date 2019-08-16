@@ -13,7 +13,7 @@ for utxo in utxo_reader.UtxoIterator():
       if int(utxo["count"]) % 1000000 == 0:
          print(utxo["count"])
    except ValueError:
-      continue
+      break
    
    # Skip non-coinbase utxo
    if utxo["coinbase"] == "0":
