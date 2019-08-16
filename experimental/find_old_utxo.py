@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 
 import time
-from lib import utxo_reader
+from lib import utxo_reader, watchlist
 
 SATOSHIS_PER_BITCOIN = 100000000.0 # 100 million
 BLOCK_HEIGHT_THRESHOLD = 100000
 
+count = 0
 for utxo in utxo_reader.UtxoIterator():
    # Print progress
    try:
@@ -25,5 +26,6 @@ for utxo in utxo_reader.UtxoIterator():
    if bitcoin == 0:
       continue
       
-   print("txid: {}, vout: {}".format(utxo["txid"], utxo["vout"]))
-   time.sleep(1)
+   count += 1
+   
+print("Old UTXO Found: {}".format(count))

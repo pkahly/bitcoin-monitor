@@ -11,11 +11,11 @@ def install():
    sql_command = """
    CREATE TABLE historical_prices (
    date DATE PRIMARY KEY,
-   open REAL,
-   high REAL,
-   low REAL,
-   close REAL,
-   change REAL,
+   open REAL NOT NULL,
+   high REAL NOT NULL,
+   low REAL NOT NULL,
+   close REAL NOT NULL,
+   change REAL NOT NULL,
    volume INTEGER,
    market_cap INTEGER);"""
 
@@ -26,8 +26,8 @@ def install():
    sql_command = """
    CREATE TABLE block_info (
    height INTEGER PRIMARY KEY,
-   hash TEXT,
-   networkhashps REAL
+   hash TEXT NOT NULL,
+   networkhashps REAL NOT NULL
    );"""
 
    cursor.execute(sql_command)
@@ -37,13 +37,24 @@ def install():
    sql_command = """
    CREATE TABLE status_info (
    timestamp INTEGER PRIMARY KEY,
-   blocks INTEGER,
-   difficulty REAL,
-   network_hash_rate REAL,
-   price REAL);"""
+   blocks INTEGER NOT NULL,
+   difficulty REAL NOT NULL,
+   network_hash_rate REAL NOT NULL,
+   price REAL NOT NULL);"""
 
    cursor.execute(sql_command)
 
+
+   # Create watchlist table
+   sql_command = """
+   CREATE TABLE watchlist (
+   txindex TEXT NOT NULL,
+   vout INTEGER NOT NULL,
+   UNIQUE (txindex, vout));"""
+
+   cursor.execute(sql_command)
+
+   
    # Commit and Close
    connection.commit()
    connection.close()
@@ -112,6 +123,7 @@ def uninstall():
    cursor.execute("""DROP TABLE historical_prices;""")
    cursor.execute("""DROP TABLE block_info;""")
    cursor.execute("""DROP TABLE status_info;""")
+   cursor.execute("""DROP TABLE watchlist;""")   
 
    # Commit and Close
    connection.commit()
