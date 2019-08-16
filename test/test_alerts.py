@@ -38,6 +38,12 @@ class TestAlerts(unittest.TestCase):
       alert_list = alerts.get_alerts(self.previous_info, self.info)
       self.assertTrue('Below Local Minimum Hash Rate: 5 H/s < 10 H/s' in alert_list)
       
+   def test_hashrate_in_range(self):
+      self.info.max_hash_rate = 10
+      self.info.min_hash_rate = 10
+      alert_list = alerts.get_alerts(self.previous_info, self.info)
+      self.assertTrue(not alert_list)
+      
    def test_high_blocktime(self):
       self.info.daily_avg = 12.1
       alert_list = alerts.get_alerts(self.previous_info, self.info)
@@ -56,7 +62,5 @@ class TestAlerts(unittest.TestCase):
       info.reorg_length = 0
       info.price_percent_change = 0
       info.network_hash_rate = 10
-      info.max_hash_rate = 20
-      info.min_hash_rate = 5
       info.daily_avg = 10
       return info

@@ -10,12 +10,12 @@ def get_alerts(previous_info, info):
    if info.difficulty_percent_change > 0:
       alerts.append("Difficulty Adjustment Occurred! Old: {} New: {} Change: {:.2f} %".format(previous_info.difficulty, info.difficulty, info.difficulty_percent_change))
       
-   if info.max_hash_rate < info.network_hash_rate:
-      hashrate_str = price_history.to_human_readable_large_number(info.network_hash_rate, price_history.HASHES_WORD_DICT)
-      max_hashrate_str = price_history.to_human_readable_large_number(info.max_hash_rate, price_history.HASHES_WORD_DICT)
-      alerts.append('Above Maximum Hash Rate: {} > {}'.format(hashrate_str, max_hashrate_str))
+   if hasattr(info, 'max_hash_rate') and info.max_hash_rate < info.network_hash_rate:
+         hashrate_str = price_history.to_human_readable_large_number(info.network_hash_rate, price_history.HASHES_WORD_DICT)
+         max_hashrate_str = price_history.to_human_readable_large_number(info.max_hash_rate, price_history.HASHES_WORD_DICT)
+         alerts.append('Above Maximum Hash Rate: {} > {}'.format(hashrate_str, max_hashrate_str))
       
-   if info.min_hash_rate > info.network_hash_rate:
+   if hasattr(info, 'min_hash_rate') and info.min_hash_rate > info.network_hash_rate:
       hashrate_str = price_history.to_human_readable_large_number(info.network_hash_rate, price_history.HASHES_WORD_DICT)
       min_hashrate_str = price_history.to_human_readable_large_number(info.min_hash_rate, price_history.HASHES_WORD_DICT)
       alerts.append('Below Local Minimum Hash Rate: {} < {}'.format(hashrate_str, min_hashrate_str))
