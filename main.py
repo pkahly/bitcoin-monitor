@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import argparse
-from lib import bitcoin_alerter, install, debug
+from lib import bitcoin_alerter, install, debug, watchlist
 
 
 parser = argparse.ArgumentParser(description='Tools for sending status and alerts for a full Bitcoin node')
@@ -18,7 +18,16 @@ parser.add_argument('--import_price_history',
                        help='populate database with historical prices')
 parser.add_argument('--uninstall',
                        action='store_true',
-                       help='dump the database tables')                       
+                       help='dump the database tables')
+
+parser.add_argument('--watchlist_old_utxo',
+                       action='store',
+                       type=int,
+                       metavar='BLOCK_HEIGHT',
+                       help='add utxo which originated before BLOCK_HEIGHT to the watchlist')  
+parser.add_argument('--clear_watchlist',
+                       action='store_true',
+                       help='delete all utxo from watchlist')
 
 parser.add_argument('--print_blocks',
                        action='store_true',
@@ -36,16 +45,28 @@ args = parser.parse_args()
 if args.install:
    install.install()
    install.add_blocks()
+
 elif args.import_price_history:
    install.import_historical_prices()
+
 elif args.uninstall:
    install.uninstall()
+
 elif args.run:
    bitcoin_alerter.run_bitcoin_alerter()
+
+elif args.watchlist_old_utxo:
+   watchlist.add_old_utxo(args.watchlist_old_utxo)
+   
+elif args.clear_watchlist:
+   watchlist.clear_watchlist()
+   
 elif args.print_blocks:
    debug.print_blocks()
+
 elif args.print_price_history:
    debug.print_price_history()
+
 elif args.print_status_history:
    debug.print_status_history()
 else:

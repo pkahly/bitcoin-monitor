@@ -48,9 +48,9 @@ def install():
    # Create watchlist table
    sql_command = """
    CREATE TABLE watchlist (
-   txindex TEXT NOT NULL,
+   txid TEXT NOT NULL,
    vout INTEGER NOT NULL,
-   UNIQUE (txindex, vout));"""
+   UNIQUE (txid, vout));"""
 
    cursor.execute(sql_command)
 
