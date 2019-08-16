@@ -1,5 +1,5 @@
 import sqlite3
-from lib import utxo_reader
+from lib import utxo_reader, bitcoin_node_api
 
 SATOSHIS_PER_BITCOIN = 100000000.0 # 100 million
 
@@ -12,8 +12,8 @@ def add_old_utxo(block_height_threshold):
       # Print progress
       try:
          if int(utxo["count"]) % 1000000 == 0:
-            print("Processed {} UTXO".format(utxo["count"]))
-            print("Found {} Old UTXO".format(count))
+            print("Processed {:,} UTXO".format(utxo["count"]))
+            print("Found {:,} Old UTXO".format(count))
             connection.commit()
       except ValueError:
          break
@@ -42,6 +42,28 @@ def add_old_utxo(block_height_threshold):
    connection.close()
    
    print("Added {} UTXO to Watchlist".format(count))
+
+
+def check_watchlist():
+   client = bitcoin_node_api.BitcoinAPIClient()
+   
+   connection = sqlite3.connect("bitcoin.db")
+   cursor = connection.cursor()
+
+   cursor.execute("""SELECT txid, vout FROM watchlist;""")   
+   
+   result = cursor.fetchone()
+   while result != None:
+       txid = result[0]
+       vout = result[1]
+       
+       current_utxo = client.get_utxo(txid, vout)
+       if not current_utxo:
+          print("UTXO Was Spent: {} {}".format(txid, vout))
+       
+       result = cursor.fetchone()
+   
+   connection.close()
    
    
 def clear_watchlist():

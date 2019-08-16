@@ -25,6 +25,9 @@ parser.add_argument('--watchlist_old_utxo',
                        type=int,
                        metavar='BLOCK_HEIGHT',
                        help='add utxo which originated before BLOCK_HEIGHT to the watchlist')  
+parser.add_argument('--check_watchlist',
+                       action='store_true',
+                       help='check watchlisted utxo against utxo set')
 parser.add_argument('--clear_watchlist',
                        action='store_true',
                        help='delete all utxo from watchlist')
@@ -57,6 +60,9 @@ elif args.run:
 
 elif args.watchlist_old_utxo:
    watchlist.add_old_utxo(args.watchlist_old_utxo)
+
+elif args.check_watchlist:
+   watchlist.check_watchlist()
    
 elif args.clear_watchlist:
    watchlist.clear_watchlist()
