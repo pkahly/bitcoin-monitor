@@ -13,6 +13,8 @@ def add_old_utxo(block_height_threshold):
       try:
          if int(utxo["count"]) % 1000000 == 0:
             print("Processed {} UTXO".format(utxo["count"]))
+            print("Found {} Old UTXO".format(count))
+            connection.commit()
       except ValueError:
          break
 
