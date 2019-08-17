@@ -90,7 +90,8 @@ This will look for daily_history.csv in the current directory. The required form
 
 Example row:
 ```
-Jul192019,10653.96,10716.98,10229.63,10530.73,20727426310,187725578628
+Jul192019,10653.96,10716.98,10229.63,10530.73
+# Several date formats are supported, create an issue or pull request if you need to add another format
 ```
 
 I retrieved Mt. Gox data from https://bitcoincharts.com/charts/mtgoxUSD and recent aggregate data from https://coinmarketcap.com/
