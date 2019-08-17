@@ -67,6 +67,17 @@ class TestAlerts(unittest.TestCase):
       alert_list = self.alertgen.get_alerts(self.previous_info, self.info)
       self.assertTrue(not alert_list)
       
+   def test_no_reorg_cooldown(self):
+      # Alert fires
+      self.info.reorg_length = 1
+      alert_list = self.alertgen.get_alerts(self.previous_info, self.info)
+      self.assertTrue('Block Reorg of 1 blocks has occurred' in alert_list)
+      
+      # Alert still fires because reorg is cooldown-exempt
+      self.info.reorg_length = 1
+      alert_list = self.alertgen.get_alerts(self.previous_info, self.info)
+      self.assertTrue('Block Reorg of 1 blocks has occurred' in alert_list)
+      
    def _get_default_info(self):
       info = info_collector.Info()
       info.num_minutes = 0
