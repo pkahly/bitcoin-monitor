@@ -79,16 +79,27 @@ def add_blocks(config):
 
 
 
-def import_historical_prices(config):
+def import_historical_prices(filename):
    connection = sqlite3.connect("bitcoin.db")
    cursor = connection.cursor()
 
-   with open(config.historical_price_filename, 'r') as file:
+   with open(filename, 'r') as file:
+      # Remove heading
+      heading = file.readline().rstrip()
+      print("Ignored CSV Heading: {}".format(heading))
+      
+      # Autodetect date format
+      line = _peek_line(file)
+      date_str = line[0:line.index(',')]
+      date_format = _get_date_format(date_str)
+      print("Autodetected Date Format as: {}".format(date_format))
+      
+      # Import
       num_lines = 0
       for line in file:
          line_split = line.rstrip().split(',')
 
-         date = datetime.strptime(line_split[0], "%b%d%Y").strftime("%Y-%m-%d")
+         date = datetime.strptime(line_split[0], date_format).strftime("%Y-%m-%d")
 
          open_price = float(line_split[1])
          high = float(line_split[2])
@@ -128,3 +139,23 @@ def uninstall():
    connection.commit()
    connection.close()
    print("Uninstall completed successfully")
+   
+
+def _get_date_format(date_str):
+    date_patterns = ["%d-%m-%Y", "%Y-%m-%d", "%b%d%Y"]
+
+    for pattern in date_patterns:
+        try:
+            datetime.strptime(date_str, pattern)
+            return pattern
+        except:
+            continue
+
+    raise RuntimeError("Date is not in a supported format: {}".format(date_str))
+
+
+def _peek_line(file):
+   pos = file.tell()
+   line = file.readline()
+   file.seek(pos)
+   return line

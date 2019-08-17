@@ -20,7 +20,6 @@ class Config:
       self.use_regtest = False
       
       self.status_frequency_in_hours = 6
-      self.historical_price_filename = 'daily_history.csv'
       self.catch_errors = True
       self.daily_summary_hour = 8
       
@@ -72,7 +71,6 @@ def _read_config():
       config.use_regtest = _get_config_param_or_use_default(config, config_file, "use_regtest")
          
       config.status_frequency_in_hours = _get_config_param_or_use_default(config, config_file, "status_frequency_in_hours")
-      config.historical_price_filename = _get_config_param_or_use_default(config, config_file, "historical_price_filename")
       config.catch_errors = _get_config_param_or_use_default(config, config_file, "catch_errors")
       config.daily_summary_hour = _get_config_param_or_use_default(config, config_file, "daily_summary_hour")
 

@@ -14,7 +14,9 @@ parser.add_argument('--install',
                        action='store_true',
                        help='create the database and populate with block info')
 parser.add_argument('--import_price_history',
-                       action='store_true',
+                       action='store',
+                       type=str,
+                       metavar='FILENAME',
                        help='populate database with historical prices')
 parser.add_argument('--uninstall',
                        action='store_true',
@@ -54,7 +56,7 @@ if args.install:
    install.add_blocks(config)
 
 elif args.import_price_history:
-   install.import_historical_prices(config)
+   install.import_historical_prices(args.import_price_history)
 
 elif args.uninstall:
    install.uninstall()
