@@ -2,6 +2,12 @@
 
 from lib import utxo_reader
 
+# Writes a new CSV file containing some of the info from utxo.csv
+# This allows experimenting with different settings for the watchlist
+# without having to loop over a very large file every time
+# Filters out UTXO that are too small or are beyond a certain block height
+# Also only writes out fields that will likely be used by other scripts
+
 VALUE_THRESHOLD = 1000000 # 1/100 of a bitcoin
 HEIGHT_THRESHOLD = 300000
 
