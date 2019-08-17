@@ -6,7 +6,19 @@
 
 ### Sample alerts:
 ```
-TODO
+No blocks in 95 minutes
+
+Difficulty Adjustment Occurred! Old: 9985348008059 New: 10347803434409 Change: 3.63 %
+
+Above Maximum Hash Rate: 90.1 EH/s > 88.4 EH/s
+
+Below Local Minimum Hash Rate: 31.5 EH/s < 44.7 EH/s
+
+Unusual Block Time: 12.1 min
+
+Block Reorg of 2 blocks has occurred
+
+Price change of 10.50 %
 ```
 
 ### Sample status update:
