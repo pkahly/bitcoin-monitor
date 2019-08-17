@@ -1,7 +1,6 @@
 bitcoin.db
 bitcoin.db-journal
 config.json
-daily_history.csv
-utxo.csv
+*.csv
 *__pycache__
 

@@ -29,8 +29,8 @@ def _run(config, alertgen):
          print("Initialized status table. Sleep {} seconds".format(SECONDS_TO_SLEEP))
          
       elif len(alert_list) > 0:
-         # Send alerts and status
-         send_alert(config, previous_info, info, alert_list)
+         # Send alerts
+         send_alert(config, alert_list)
       
       elif time_tools.should_send_daily_summary(config, previous_info.status_time, datetime.now()):
          send_daily_summary(config)
@@ -68,13 +68,9 @@ def _run_with_exponential_backoff(config, alertgen):
       error_sleep = min(error_sleep * 2, MAX_ERROR_SLEEP)
       
       
-def send_alert(config, previous_info, info, alert_list):
-   status_string = status.get_status(previous_info, info)
-   alert_string = "\n".join(alert_list) + "\n\n" + status_string
-
+def send_alert(config, alert_list):
+   alert_string = "\n".join(alert_list)
    email.send_email(config, "Bitcoin ALERT", alert_string);
-
-   info_collector.write_info(info)
    
 
 def send_status(config, previous_info, info):
@@ -90,7 +86,7 @@ def send_daily_summary(config):
    if previous_info == None:
       return
    
-   info = info_collector.get_info(previous_info)
+   info = info_collector.get_info(config, previous_info)
    summary = status.get_daily_summary(previous_info, info)
    
    email.send_email(config, "Bitcoin Daily Summary", summary)

@@ -84,9 +84,8 @@ def import_historical_prices(config):
    cursor = connection.cursor()
 
    with open(config.historical_price_filename, 'r') as file:
-      lines = list(file)
-      num_lines = len(lines)
-      for line in reversed(lines):
+      num_lines = 0
+      for line in file:
          line_split = line.rstrip().split(',')
 
          date = datetime.strptime(line_split[0], "%b%d%Y").strftime("%Y-%m-%d")
@@ -108,6 +107,7 @@ def import_historical_prices(config):
 
          sql_command = "INSERT INTO historical_prices (date, open, high, low, close, change, volume, market_cap)\nVALUES (\"{}\", {}, {}, {}, {}, {}, {}, {});".format(date, open_price, high, low, close, change, volume, market_cap)
          cursor.execute(sql_command)
+         num_lines += 1
 
    # Commit and Close
    connection.commit()

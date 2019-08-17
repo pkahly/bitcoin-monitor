@@ -47,8 +47,8 @@ def get_daily_summary(previous_info, info):
    statuses = []
    
    # Duration since previous_info, ideally 24 hours
-   # TODO change format
-   statuses.append("Difference Since: {}".format(previous_info.status_time))
+   time_str = previous_info.status_time.strftime("%m-%d %I:%M %p")
+   statuses.append("Difference Since: {}".format(time_str))
    statuses.append("")
    
    # Add the common status items
