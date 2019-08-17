@@ -11,12 +11,58 @@ TODO
 
 ### Sample status update:
 ```
+Blocks: 590,508 ( + 21 )
+Minutes Since Last Block: 1
 
+Network Hash Rate: 67.80 EH/s ( 3.56 % )
+Blocks until next difficulty adjustment: 180
+
+Average time between blocks
+Last day: 10.61 min
+Last month: 9.38 min
+
+Total Coins Mined: 17,881,362 ( 85.15 % )
+Remaining Coins: 3,118,638
+
+Current Reward: 12.5
+Blocks Until Next Halving: 39,491 ( ~274 days )
+
+Price: $10,405.79 ( 0.20 % )
+Market Cap: $186.07 billion
 ```
 
 ### Sample daily summary:
 ```
+Difference Since: 08-16 10:24 AM
 
+Blocks: 590,517 ( + 124 )
+Minutes Since Last Block: 5
+
+Network Hash Rate: 68.95 EH/s ( -5.67 % )
+Blocks until next difficulty adjustment: 171
+
+Average time between blocks
+Last day: 10.46 min
+Last month: 9.39 min
+
+Total Coins Mined: 17,881,475 ( 85.15 % )
+Remaining Coins: 3,118,525
+
+Current Reward: 12.5
+Blocks Until Next Halving: 39,482 ( ~274 days )
+
+Price: $10,327.64 ( 1.94 % )
+Market Cap: $184.67 billion
+
+All Time High Hash Rate: 88.4 EH/s
+Lowest Recent Hash Rate: 44.7 EH/s
+
+Historical Prices:
+2018-08-17 :  $6,580.63      56.94 %
+2017-08-17 :  $4,331.69     138.42 %
+2016-08-17 :    $573.22    1701.69 %
+2015-08-17 :    $257.98    3903.27 %
+2014-08-17 :    $491.80    1999.97 %
 ```
 
 ### Set Up Instructions:
