@@ -14,10 +14,7 @@ def install():
    open REAL NOT NULL,
    high REAL NOT NULL,
    low REAL NOT NULL,
-   close REAL NOT NULL,
-   change REAL NOT NULL,
-   volume INTEGER,
-   market_cap INTEGER);"""
+   close REAL NOT NULL);"""
 
    cursor.execute(sql_command)
 
@@ -101,24 +98,18 @@ def import_historical_prices(filename):
 
          date = datetime.strptime(line_split[0], date_format).strftime("%Y-%m-%d")
 
-         open_price = float(line_split[1])
-         high = float(line_split[2])
-         low = float(line_split[3])
-         close = float(line_split[4])
-         
-         volume = 0
-         if line_split[5] != "-":
-            volume = int(line_split[5])
-      
-         market_cap = 0
-         if line_split[6] != "-":
-            market_cap = int(line_split[6])
+         open_price = _float_or_zero(line_split[1])
+         high = _float_or_zero(line_split[2])
+         low = _float_or_zero(line_split[3])
+         close = _float_or_zero(line_split[4])
 
-         change = round(price_history.percent_change(open_price, close), 2)
-
-         sql_command = "INSERT INTO historical_prices (date, open, high, low, close, change, volume, market_cap)\nVALUES (\"{}\", {}, {}, {}, {}, {}, {}, {});".format(date, open_price, high, low, close, change, volume, market_cap)
-         cursor.execute(sql_command)
-         num_lines += 1
+         try:
+            sql_command = "INSERT INTO historical_prices (date, open, high, low, close)\nVALUES (\"{}\", {}, {}, {}, {});".format(date, open_price, high, low, close)
+            cursor.execute(sql_command)
+            num_lines += 1
+         except sqlite3.IntegrityError:
+            # Skip duplicates
+            continue
 
    # Commit and Close
    connection.commit()
@@ -151,7 +142,7 @@ def _get_date_format(date_str):
         except:
             continue
 
-    raise RuntimeError("Date is not in a supported format: {}".format(date_str))
+    raise RuntimeError("Date is not in a supported format: '{}'. Allowed Formats: {}".format(date_str, ", ".join(date_patterns)))
 
 
 def _peek_line(file):
@@ -159,3 +150,10 @@ def _peek_line(file):
    line = file.readline()
    file.seek(pos)
    return line
+   
+   
+def _float_or_zero(string):
+   try:
+      return float(string)
+   except ValueError:
+      return 0.0

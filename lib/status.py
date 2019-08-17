@@ -69,10 +69,10 @@ def get_daily_summary(previous_info, info):
    
    statuses.append("Historical Prices:")
    
-   for years_ago in range(1, 6):
+   for years_ago in range(1, 50):
       history_info = price_history.get_historical_price(cursor, years_ago)
       if history_info == None:
-         continue
+         break
       
       old_date_str = history_info[0]
       old_price = history_info[1]
