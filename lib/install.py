@@ -94,14 +94,18 @@ def import_historical_prices(filename):
       # Import
       num_lines = 0
       for line in file:
-         line_split = line.rstrip().split(',')
+         line = line.rstrip()
+         line_split = line.split(',')
 
-         date = datetime.strptime(line_split[0], date_format).strftime("%Y-%m-%d")
+         try:
+            date = datetime.strptime(line_split[0], date_format).strftime("%Y-%m-%d")
 
-         open_price = _float_or_zero(line_split[1])
-         high = _float_or_zero(line_split[2])
-         low = _float_or_zero(line_split[3])
-         close = _float_or_zero(line_split[4])
+            open_price = float(line_split[1])
+            high = float(line_split[2])
+            low = float(line_split[3])
+            close = float(line_split[4])
+         except:
+            print("Skipping Invalid Line: {}".format(line))
 
          try:
             sql_command = "INSERT INTO historical_prices (date, open, high, low, close)\nVALUES (\"{}\", {}, {}, {}, {});".format(date, open_price, high, low, close)
@@ -150,10 +154,3 @@ def _peek_line(file):
    line = file.readline()
    file.seek(pos)
    return line
-   
-   
-def _float_or_zero(string):
-   try:
-      return float(string)
-   except ValueError:
-      return 0.0
