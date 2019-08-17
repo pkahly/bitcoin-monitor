@@ -50,18 +50,18 @@ class TestAlerts(unittest.TestCase):
    def test_high_blocktime(self):
       self.info.daily_avg = 12.1
       alert_list = self.alertgen.get_alerts(self.previous_info, self.info)
-      self.assertTrue('Unusual Block Time: 12.1 min' in alert_list)
+      self.assertTrue('Unusual Block Time: 12.10 min' in alert_list)
       
    def test_low_blocktime(self):
       self.info.daily_avg = 7.9
       alert_list = self.alertgen.get_alerts(self.previous_info, self.info)
-      self.assertTrue('Unusual Block Time: 7.9 min' in alert_list)
+      self.assertTrue('Unusual Block Time: 7.90 min' in alert_list)
       
    def test_alert_cooldown(self):
       # Alert fires
       self.info.daily_avg = 7.9
       alert_list = self.alertgen.get_alerts(self.previous_info, self.info)
-      self.assertTrue('Unusual Block Time: 7.9 min' in alert_list)
+      self.assertTrue('Unusual Block Time: 7.90 min' in alert_list)
       
       # Alert doesn't fire
       alert_list = self.alertgen.get_alerts(self.previous_info, self.info)

@@ -26,7 +26,7 @@ class AlertGenerator:
          alerts.append('Below Local Minimum Hash Rate: {} < {}'.format(hashrate_str, min_hashrate_str))
          
       if abs(info.daily_avg - 10) > 2: # TODO make threshold a configuration option
-         alerts.append("Unusual Block Time: {} min".format(info.daily_avg))
+         alerts.append("Unusual Block Time: {:.2f} min".format(info.daily_avg))
          
       if info.reorg_length > self.config.block_reorg_threshold:
          alerts.append("Block Reorg of {} blocks has occurred".format(info.reorg_length))
