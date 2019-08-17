@@ -53,6 +53,7 @@ def check_watchlist():
    cursor.execute("""SELECT txid, vout FROM watchlist;""")   
    
    result = cursor.fetchone()
+   count = 0
    while result != None:
        txid = result[0]
        vout = result[1]
@@ -62,8 +63,10 @@ def check_watchlist():
           print("UTXO Was Spent: {} {}".format(txid, vout))
        
        result = cursor.fetchone()
+       count += 1
    
    connection.close()
+   print("Checked all {} UTXO from watchlist".format(count))
    
    
 def clear_watchlist():

@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import argparse
-from lib import bitcoin_alerter, install, debug, watchlist
+from lib import bitcoin_alerter, install, debug, watchlist, config_reader
 
 
 parser = argparse.ArgumentParser(description='Tools for sending status and alerts for a full Bitcoin node')
@@ -42,21 +42,25 @@ parser.add_argument('--print_status_history',
                        action='store_true',
                        help='Print the contents of the status database')                                                                     
 
-args = parser.parse_args()
 
+# Load config (this should be the ONLY config load)
+config = config_reader.load_config()
+
+# Process flags
+args = parser.parse_args()
 
 if args.install:
    install.install()
-   install.add_blocks()
+   install.add_blocks(config)
 
 elif args.import_price_history:
-   install.import_historical_prices()
+   install.import_historical_prices(config)
 
 elif args.uninstall:
    install.uninstall()
 
 elif args.run:
-   bitcoin_alerter.run_bitcoin_alerter()
+   bitcoin_alerter.run_bitcoin_alerter(config)
 
 elif args.watchlist_old_utxo:
    watchlist.add_old_utxo(args.watchlist_old_utxo)

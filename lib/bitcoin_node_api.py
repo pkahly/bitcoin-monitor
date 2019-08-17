@@ -11,9 +11,7 @@ REGTEST_PORT = 18443
 
 class BitcoinAPIClient:
 
-   def __init__(self):
-      config = config_reader.get_config()
-
+   def __init__(self, config):
       port = MAINNET_PORT
       if config.use_testnet and config.use_regtest:
          raise RuntimeError("Cannot specify both testnet AND regtest")

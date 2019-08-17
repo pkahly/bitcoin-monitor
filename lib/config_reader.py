@@ -33,7 +33,7 @@ class Config:
       self.local_min_hashrate_blocks = 10000
    
 
-def get_config():
+def load_config():
    _write_config_if_missing()
    
    try:

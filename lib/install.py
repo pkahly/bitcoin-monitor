@@ -1,6 +1,6 @@
 import sqlite3
 from datetime import datetime
-from lib import reorg, price_history, config_reader, bitcoin_node_api
+from lib import reorg, price_history, bitcoin_node_api
 
 
 def install():
@@ -61,9 +61,9 @@ def install():
    print("Install completed successfully")
 
 
-def add_blocks():
-   client = bitcoin_node_api.BitcoinAPIClient()
-   reorg_info = reorg.add_blocks(client)
+def add_blocks(config):
+   client = bitcoin_node_api.BitcoinAPIClient(config)
+   reorg_info = reorg.add_blocks(config, client)
 
    highest_stored_block = reorg_info["highest_stored_block"]
    num_blocks = reorg_info["num_blocks"]
@@ -79,11 +79,10 @@ def add_blocks():
 
 
 
-def import_historical_prices():
+def import_historical_prices(config):
    connection = sqlite3.connect("bitcoin.db")
    cursor = connection.cursor()
 
-   config = config_reader.get_config()
    with open(config.historical_price_filename, 'r') as file:
       lines = list(file)
       num_lines = len(lines)

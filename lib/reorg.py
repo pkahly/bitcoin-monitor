@@ -61,8 +61,7 @@ def delete_rows_after(connection, cursor, height):
    print("Deleted block info after {}".format(height))
    
    
-def add_blocks(bitcoin_client):
-   config = config_reader.get_config()
+def add_blocks(config, bitcoin_client):
    connection = sqlite3.connect("bitcoin.db")
    cursor = connection.cursor()
 

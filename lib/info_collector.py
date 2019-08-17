@@ -18,10 +18,9 @@ class Info:
       self.status_time = datetime.now()
 
 
-def get_info(previous_info):
+def get_info(config, previous_info):
    info = Info()
-   bitcoin_client = bitcoin_node_api.BitcoinAPIClient()
-   config = config_reader.get_config()
+   bitcoin_client = bitcoin_node_api.BitcoinAPIClient(config)
    
    # Blocks and Headers
    info.blocks = bitcoin_client.get_num_blocks()
@@ -63,7 +62,7 @@ def get_info(previous_info):
    info.monthly_avg = get_average_block_time(bitcoin_client, info.blocks, BLOCKS_PER_MONTH)
    
    # Reorg Detection
-   reorg_info = reorg.add_blocks(bitcoin_client)
+   reorg_info = reorg.add_blocks(config, bitcoin_client)
    highest_stored_block = reorg_info["highest_stored_block"]
    last_matching_height = reorg_info["last_matching_height"]
    

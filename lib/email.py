@@ -1,10 +1,8 @@
 import smtplib
 from datetime import datetime
-from lib import config_reader
 
 
-def send_email(subject, message):
-   config = config_reader.get_config()
+def send_email(config, subject, message):
    dt = datetime.today()
    
    if config.use_testnet:
