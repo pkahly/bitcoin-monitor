@@ -4,35 +4,65 @@
 
 ## Monitors a full Bitcoin node and sends status emails and alerts.
 
-### Sample status contents:
+### Sample alerts:
 ```
-Blocks: 589,515 ( + 31 )
-Last Block Time: 08-10 02:55 PM
-Minutes Since Last Block: 7
+TODO
+```
 
-Difficulty: 9985348008059.555
-Network Hash Rate: 72.70 EH/s ( 0.90 % )
-Blocks until next difficulty adjustment: 1,173
+### Sample status update:
+```
+Blocks: 590,508 ( + 21 )
+Minutes Since Last Block: 1
+
+Network Hash Rate: 67.80 EH/s ( 3.56 % )
+Blocks until next difficulty adjustment: 180
 
 Average time between blocks
-Last day: 9.55 min
-Last week: 9.54 min
-Last month: 9.45 min
+Last day: 10.61 min
+Last month: 9.38 min
 
-Total Coins Mined: 17,868,950 ( 85.09 % )
-Remaining Coins: 3,131,050
+Total Coins Mined: 17,881,362 ( 85.15 % )
+Remaining Coins: 3,118,638
+
 Current Reward: 12.5
-Blocks Until Next Halving: 40,484 ( ~281 days )
+Blocks Until Next Halving: 39,491 ( ~274 days )
 
-Price: $11,344.34 ( -0.30 % )
-Market Cap: $202.71 billion
+Price: $10,405.79 ( 0.20 % )
+Market Cap: $186.07 billion
+```
+
+### Sample daily summary:
+```
+Difference Since: 08-16 10:24 AM
+
+Blocks: 590,517 ( + 124 )
+Minutes Since Last Block: 5
+
+Network Hash Rate: 68.95 EH/s ( -5.67 % )
+Blocks until next difficulty adjustment: 171
+
+Average time between blocks
+Last day: 10.46 min
+Last month: 9.39 min
+
+Total Coins Mined: 17,881,475 ( 85.15 % )
+Remaining Coins: 3,118,525
+
+Current Reward: 12.5
+Blocks Until Next Halving: 39,482 ( ~274 days )
+
+Price: $10,327.64 ( 1.94 % )
+Market Cap: $184.67 billion
+
+All Time High Hash Rate: 88.4 EH/s
+Lowest Recent Hash Rate: 44.7 EH/s
 
 Historical Prices:
-2018-08-10 :  $6,184.71      83.43 %
-2017-08-10 :  $3,381.28     235.50 %
-2016-08-10 :    $592.10    1815.95 %
-2015-08-10 :    $264.47    4189.46 %
-2014-08-10 :    $591.06    1819.32 %
+2018-08-17 :  $6,580.63      56.94 %
+2017-08-17 :  $4,331.69     138.42 %
+2016-08-17 :    $573.22    1701.69 %
+2015-08-17 :    $257.98    3903.27 %
+2014-08-17 :    $491.80    1999.97 %
 ```
 
 ### Set Up Instructions:
@@ -55,13 +85,16 @@ Historical Prices:
 
 This will look for daily_history.csv in the current directory. The required format is as follows:
 ```
-<Date>,<open>,<high>,<low>,<close>,<volume>,<market cap>
+<date>,<open>,<high>,<low>,<close>
 ```
 
 Example row:
 ```
-Jul192019,10653.96,10716.98,10229.63,10530.73,20727426310,187725578628
+Jul192019,10653.96,10716.98,10229.63,10530.73
+# Several date formats are supported, create an issue or pull request if you need to add another format
 ```
+
+I retrieved Mt. Gox data from https://bitcoincharts.com/charts/mtgoxUSD and recent aggregate data from https://coinmarketcap.com/
 
 #### Edit the default config.json that was created automatically during the install. Format:
 ```
@@ -76,7 +109,6 @@ Jul192019,10653.96,10716.98,10229.63,10530.73,20727426310,187725578628
 "bitcoind_pass": "DO_NOT_USE_76cf8e3a30fb29b4131a8babb", 
 "use_testnet": false, 
 "use_regtest": false, 
-"minutes_to_sleep": 5, 
 "status_frequency_in_hours": 6, 
 "historical_price_filename": "daily_history.csv", 
 "catch_errors": true, 
