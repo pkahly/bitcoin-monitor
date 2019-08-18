@@ -8,7 +8,7 @@
 ```
 No blocks in 95 minutes
 
-Difficulty Adjustment Occurred! Old: 9985348008059 New: 10347803434409 Change: 3.63 %
+Difficulty Adjustment Occurred! Old: 9985348008059.555 New: 10183488432890 Change: 1.98 %
 
 Above Maximum Hash Rate: 90.1 EH/s > 88.4 EH/s
 
