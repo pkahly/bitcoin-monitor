@@ -62,10 +62,10 @@ def get_historical_price(cursor, years_ago):
 # Returns a dict containing date and OHLC data
 
 class PriceIterator:
-   def __init__(self):
+   def __init__(self, start, end):
       connection = sqlite3.connect("bitcoin.db")
       self.cursor = connection.cursor()
-      self.cursor.execute("SELECT date, open, high, low, close FROM historical_prices ORDER BY date ASC")
+      self.cursor.execute("SELECT date, open, high, low, close FROM historical_prices WHERE timestamp > {} AND timestamp < {} ORDER BY date ASC".format(int(start), int(end)))
 
    def __next__(self):
       result = self.cursor.fetchone()

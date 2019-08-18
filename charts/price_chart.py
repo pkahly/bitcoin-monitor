@@ -2,10 +2,13 @@
 
 import plotly.graph_objects as go
 from lib import price_history
+from datetime import datetime
 
 
 USE_LOG_SCALE = True
-GROUPING = 365
+GROUPING = 60
+START = datetime.timestamp(datetime.strptime("2015-08-10", "%Y-%m-%d"))
+END = datetime.timestamp(datetime.strptime("2019-08-10", "%Y-%m-%d"))
 
 
 def combine_rows(group):
@@ -37,7 +40,7 @@ if __name__ == "__main__":
    close_data = []
 
    # Extract data with grouping
-   price_iter = price_history.PriceIterator()
+   price_iter = price_history.PriceIterator(START, END)
    group = []
 
    for price_row in price_iter:
@@ -59,9 +62,11 @@ if __name__ == "__main__":
    # Build chart
    fig = go.Figure(data=[go.Candlestick(x=dates,
                           open=open_data, high=high_data,
-                          low=low_data, close=close_data)])
+                          low=low_data, close=close_data)], )
                          
    if USE_LOG_SCALE:
-      fig.update_yaxes(type="log", tickvals=[0, 100, 1000, 10000])
+      fig.update_yaxes(type="log")
+      
 
+   fig.update_layout(xaxis_rangeslider_visible=False)
    fig.show(renderer="browser")
