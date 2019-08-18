@@ -2,8 +2,6 @@ from enum import Enum
 from datetime import datetime, timedelta
 from lib import config_reader, price_history
 
-ALERT_COOLDOWN = timedelta(hours=4)
-
 class AlertType(Enum):
    NO_BLOCKS_IN_MINS = 0
    DIFFICULTY_CHANGE = 1
@@ -17,6 +15,7 @@ class AlertGenerator:
    def __init__(self, config):
       self.config = config
       self.alert_cooldowns = {}
+      self.cooldown_time = timedelta(hours=config.status_frequency_in_hours)
    
    
    def get_alerts(self, previous_info, info):
@@ -46,7 +45,7 @@ class AlertGenerator:
       last_alert = self.alert_cooldowns[key]
       difference = datetime.now() - last_alert
       
-      if difference > ALERT_COOLDOWN:
+      if difference > self.cooldown_time:
          self.alert_cooldowns[key]  = datetime.now()
          return True
       
