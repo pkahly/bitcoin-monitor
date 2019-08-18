@@ -1,3 +1,4 @@
+import sqlite3
 from datetime import datetime
 
 NUMBER_WORD_DICT = {
@@ -55,3 +56,30 @@ def get_historical_price(cursor, years_ago):
    else:
       print("No price data for {}".format(old_date_str))
       return None
+      
+
+# Iterator for the price_history table
+# Returns a dict containing date and OHLC data
+
+class PriceIterator:
+   def __init__(self):
+      connection = sqlite3.connect("bitcoin.db")
+      self.cursor = connection.cursor()
+      self.cursor.execute("SELECT date, open, high, low, close FROM historical_prices ORDER BY date ASC")
+
+   def __next__(self):
+      result = self.cursor.fetchone()
+      if not result:
+         raise StopIteration
+      
+      date = datetime.strptime(result[0], "%Y-%m-%d")
+
+      open = float(result[1])
+      high = float(result[2])
+      low = float(result[3])
+      close = float(result[4])
+      
+      return {"date": date, "open": open, "high": high, "low": low, "close": close}
+
+   def __iter__(self):
+      return self

@@ -1,46 +1,67 @@
 #!/usr/bin/python3
 
-import sqlite3
 import plotly.graph_objects as go
-import numpy as np
-from datetime import datetime
+from lib import price_history
+
 
 USE_LOG_SCALE = True
+GROUPING = 365
 
-# Open database connection
-connection = sqlite3.connect("bitcoin.db")
-cursor = connection.cursor()
 
-# Candlestick fields
-dates = []
-open_data = []
-high_data = []
-low_data = []
-close_data = []
+def combine_rows(group):
+   # Use starting date
+   date = group[0]["date"]
+   
+   # Use first open
+   open = group[0]["open"]
+   
+   # Use maximum high and minimum low
+   high = group[0]["high"]
+   low = group[0]["low"]
+   for row in group:
+      high = max(high, row["high"])
+      low = min(low, row["low"])
+   
+   # Use last close
+   close = group[-1]["close"]
+   
+   return {"date": date, "open": open, "high": high, "low": low, "close": close}
 
-# Process rows
-cursor.execute("SELECT date, open, high, low, close FROM historical_prices ORDER BY date ASC")
-result = cursor.fetchone()
 
-while result != None:
-    date = datetime.strptime(result[0], "%Y-%m-%d")
-    dates.append(date)
-    
-    open_data.append(float(result[1]))
-    high_data.append(float(result[2]))
-    low_data.append(float(result[3]))
-    close_data.append(float(result[4]))
-    
-    result = cursor.fetchone()
+if __name__ == "__main__":
+   # Candlestick fields
+   dates = []
+   open_data = []
+   high_data = []
+   low_data = []
+   close_data = []
 
-connection.close()
+   # Extract data with grouping
+   price_iter = price_history.PriceIterator()
+   group = []
 
-# Build chart
-fig = go.Figure(data=[go.Candlestick(x=dates,
-                       open=open_data, high=high_data,
-                       low=low_data, close=close_data)])
-                      
-if USE_LOG_SCALE:
-   fig.update_yaxes(type="log")
+   for price_row in price_iter:
+      # Add to group
+      if len(group) < GROUPING:
+         group.append(price_row)
 
-fig.show(renderer="browser")
+      # Combine group into one candlestick
+      else: 
+         group_row = combine_rows(group)
+         group = []
+         
+         dates.append(group_row["date"])
+         open_data.append(group_row["open"])
+         high_data.append(group_row["high"])
+         low_data.append(group_row["low"])
+         close_data.append(group_row["close"])
+
+   # Build chart
+   fig = go.Figure(data=[go.Candlestick(x=dates,
+                          open=open_data, high=high_data,
+                          low=low_data, close=close_data)])
+                         
+   if USE_LOG_SCALE:
+      fig.update_yaxes(type="log", tickvals=[0, 100, 1000, 10000])
+
+   fig.show(renderer="browser")

@@ -10,7 +10,8 @@ def install():
    # Create historical_prices table
    sql_command = """
    CREATE TABLE historical_prices (
-   date DATE PRIMARY KEY,
+   timestamp INTEGER PRIMARY KEY,
+   date DATE NOT NULL UNIQUE,
    open REAL NOT NULL,
    high REAL NOT NULL,
    low REAL NOT NULL,
@@ -98,7 +99,9 @@ def import_historical_prices(filename):
          line_split = line.split(',')
 
          try:
-            date = datetime.strptime(line_split[0], date_format).strftime("%Y-%m-%d")
+            date = datetime.strptime(line_split[0], date_format)
+            date_str = date.strftime("%Y-%m-%d")
+            timestamp = datetime.timestamp(date)
 
             open_price = float(line_split[1])
             high = float(line_split[2])
@@ -108,7 +111,7 @@ def import_historical_prices(filename):
             print("Skipping Invalid Line: {}".format(line))
 
          try:
-            sql_command = "INSERT INTO historical_prices (date, open, high, low, close)\nVALUES (\"{}\", {}, {}, {}, {});".format(date, open_price, high, low, close)
+            sql_command = "INSERT INTO historical_prices (date, timestamp, open, high, low, close)\nVALUES (\"{}\", {}, {}, {}, {}, {});".format(date_str, timestamp, open_price, high, low, close)
             cursor.execute(sql_command)
             num_lines += 1
          except sqlite3.IntegrityError:
