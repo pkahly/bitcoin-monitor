@@ -68,7 +68,7 @@ elif args.watchlist_old_utxo:
    watchlist.add_old_utxo(args.watchlist_old_utxo)
 
 elif args.check_watchlist:
-   watchlist.check_watchlist()
+   watchlist.check_watchlist(config)
    
 elif args.clear_watchlist:
    watchlist.clear_watchlist()

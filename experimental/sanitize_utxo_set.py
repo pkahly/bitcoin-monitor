@@ -12,7 +12,7 @@ VALUE_THRESHOLD = 1000000 # 1/100 of a bitcoin
 HEIGHT_THRESHOLD = 300000
 
 NEW_FILE = "new_utxo.csv"
-FIELDS_TO_SAVE = ["count", "txid", "vout", "height", "coinbase", "amount"]
+FIELDS_TO_SAVE = ["txid", "vout", "height", "coinbase", "amount"]
 
 with open(NEW_FILE, 'w') as file:
    # Write header

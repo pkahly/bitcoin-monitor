@@ -9,15 +9,6 @@ def add_old_utxo(block_height_threshold):
 
    count = 0
    for utxo in utxo_reader.UtxoIterator():
-      # Print progress
-      try:
-         if int(utxo["count"]) % 1000000 == 0:
-            print("Processed {:,} UTXO".format(utxo["count"]))
-            print("Found {:,} Old UTXO".format(count))
-            connection.commit()
-      except ValueError:
-         break
-
       # Skip newer utxo
       height = int(utxo["height"])   
       if height > block_height_threshold:
@@ -44,8 +35,8 @@ def add_old_utxo(block_height_threshold):
    print("Added {} UTXO to Watchlist".format(count))
 
 
-def check_watchlist():
-   client = bitcoin_node_api.BitcoinAPIClient()
+def check_watchlist(config):
+   client = bitcoin_node_api.BitcoinAPIClient(config)
    
    connection = sqlite3.connect("bitcoin.db")
    cursor = connection.cursor()

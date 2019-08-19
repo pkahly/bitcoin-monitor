@@ -19,10 +19,9 @@ class UtxoIterator:
       self.keys = self._get_split_line()
 
    def __next__(self):
-      if not self.file:
-         raise StopIteration
-      
       line_split = self._get_split_line()
+      if len(line_split) < len(self.keys):
+         raise StopIteration
       
       # Add values to dictionary, with csv headings as keys
       utxo = {}
