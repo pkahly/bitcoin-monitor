@@ -43,7 +43,7 @@ def get_status(previous_info, info):
    return "\n".join(statuses)   
    
    
-def get_daily_summary(previous_info, info):
+def get_daily_summary(previous_info, info, spent_utxo):
    statuses = []
    
    # Duration since previous_info, ideally 24 hours
@@ -83,5 +83,13 @@ def get_daily_summary(previous_info, info):
       statuses.append("{} : {:>10} {:>10.2f} %".format(old_date_str, old_price_str, price_percent_change))
 
    connection.close()
+   
+   statuses.append("")
+   
+   # Check watchlist for spent UTXO
+   statuses.append("{} spent watchlist UTXO".format(len(spent_utxo)))
+   
+   for utxo in spent_utxo:
+      statuses.append(str(utxo))
    
    return "\n".join(statuses)

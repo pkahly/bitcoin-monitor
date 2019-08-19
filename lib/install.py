@@ -48,6 +48,8 @@ def install():
    CREATE TABLE watchlist (
    txid TEXT NOT NULL,
    vout INTEGER NOT NULL,
+   height INTEGER NOT NULL,
+   bitcoin REAL NOT NULL,
    UNIQUE (txid, vout));"""
 
    cursor.execute(sql_command)

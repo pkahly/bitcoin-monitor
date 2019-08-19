@@ -9,6 +9,9 @@ parser = argparse.ArgumentParser(description='Tools for sending status and alert
 parser.add_argument('--run',
                        action='store_true',
                        help='run the alerter')
+parser.add_argument('--run_daily_summary',
+                       action='store_true',
+                       help='run the alerter\'s daily summary')
 
 parser.add_argument('--install',
                        action='store_true',
@@ -63,6 +66,9 @@ elif args.uninstall:
 
 elif args.run:
    bitcoin_alerter.run_bitcoin_alerter(config)
+   
+elif args.run_daily_summary:
+   bitcoin_alerter.send_daily_summary(config)
 
 elif args.watchlist_old_utxo:
    watchlist.add_old_utxo(args.watchlist_old_utxo)

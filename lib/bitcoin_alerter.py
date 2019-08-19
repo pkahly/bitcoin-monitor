@@ -1,6 +1,6 @@
 import time
 from datetime import datetime, timedelta
-from lib import info_collector, email, status, alerts, time_tools
+from lib import info_collector, email, status, alerts, time_tools, watchlist
 
 SECONDS_TO_SLEEP = 600 # 10 minutes
 INITIAL_ERROR_SLEEP = 600 # 10 minutes
@@ -84,11 +84,14 @@ def send_status(config, previous_info, info):
 def send_daily_summary(config):
    previous_info = info_collector.get_closest_info_to_timestamp(time_tools.get_timestamp_hours_ago(24, datetime.now()))
    if previous_info == None:
+      print("No saved info, cannot send daily summary")
       return
    
    info = info_collector.get_info(config, previous_info)
-   summary = status.get_daily_summary(previous_info, info)
+   spent_utxo = watchlist.check_watchlist(config)
    
+   summary = status.get_daily_summary(previous_info, info, spent_utxo)
    email.send_email(config, "Bitcoin Daily Summary", summary)
    
    info_collector.write_info(info)
+   watchlist.remove_all_from_watchlist(spent_utxo)
