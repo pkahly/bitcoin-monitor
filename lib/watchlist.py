@@ -45,6 +45,7 @@ def check_watchlist(config):
    
    result = cursor.fetchone()
    count = 0
+   spent_utxo = []
    while result != None:
        txid = result[0]
        vout = result[1]
@@ -52,14 +53,29 @@ def check_watchlist(config):
        current_utxo = client.get_utxo(txid, vout)
        if not current_utxo:
           print("UTXO Was Spent: {} {}".format(txid, vout))
+          spent_utxo.append(result)
        
        result = cursor.fetchone()
        count += 1
    
    connection.close()
    print("Checked all {} UTXO from watchlist".format(count))
-   
-   
+
+   return spent_utxo
+
+
+def remove_from_watchlist(txid, vout):
+   connection = sqlite3.connect("bitcoin.db")
+   cursor = connection.cursor()
+
+   cursor.execute("DELETE FROM watchlist WHERE txid = \"{}\" AND vout = {};".format(txid, int(vout)))
+
+   # Commit and Close
+   connection.commit()
+   connection.close()
+   print("Removed from watchlist")
+
+
 def clear_watchlist():
    connection = sqlite3.connect("bitcoin.db")
    cursor = connection.cursor()
