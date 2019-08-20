@@ -1,8 +1,10 @@
 import sqlite3
 import json
-from lib import config_reader
+from datetime import datetime
+from lib import config_reader, price_history
 
 SATOSHIS_PER_BITCOIN = 100000000.0 # 100 million
+BLOCKS_PER_YEAR = 52560 # 144 * 365
 
 def get_highest_stored_block(cursor):
    cursor.execute("SELECT height FROM block_info ORDER BY height DESC limit 1")
@@ -18,7 +20,7 @@ def get_max_hashrate(end_height):
    connection = sqlite3.connect("bitcoin.db")
    cursor = connection.cursor()
    
-   cursor.execute("SELECT networkhashps FROM block_info where height <= {} ORDER BY networkhashps DESC limit 1".format(int(end_height)))
+   cursor.execute("SELECT networkhashps FROM block_info WHERE height <= {} ORDER BY networkhashps DESC limit 1".format(int(end_height)))
    result = cursor.fetchone()
    
    if result == None:
@@ -31,7 +33,7 @@ def get_min_hashrate(start_height, end_height):
    connection = sqlite3.connect("bitcoin.db")
    cursor = connection.cursor()
    
-   cursor.execute("SELECT networkhashps FROM block_info where height >= {} and height <= {} ORDER BY networkhashps ASC limit 1".format(int(start_height), int(end_height)))
+   cursor.execute("SELECT networkhashps FROM block_info WHERE height >= {} and height <= {} ORDER BY networkhashps ASC limit 1".format(int(start_height), int(end_height)))
    result = cursor.fetchone()
    
    if result == None:
@@ -39,6 +41,32 @@ def get_min_hashrate(start_height, end_height):
    else:
       return result[0]
       
+
+def get_historical_hashrates(height):
+   historical_hashrates = []
+   
+   connection = sqlite3.connect("bitcoin.db")
+   cursor = connection.cursor()
+   
+   year = datetime.now().year()
+   while height > 0:
+      height -= BLOCKS_PER_YEAR
+      year -= 1
+
+      cursor.execute("SELECT networkhashps FROM block_info WHERE height = {}".format(int(height)))
+      result = cursor.fetchone()
+   
+      if result == None:
+         break
+      else:
+         hashrate = result[0]
+         hashrate_str = price_history.to_human_readable_large_number(hashrate, price_history.HASHES_WORD_DICT)
+         historical_hashrates.append("{} : {}".format(year, hashrate_str))
+         print(hashrate)
+      
+   connection.close()
+   return historical_hashrates
+
 
 def get_avg_block_info(start_height, end_height):
    connection = sqlite3.connect("bitcoin.db")
@@ -64,6 +92,7 @@ def get_avg_block_info(start_height, end_height):
    avg_bitcoin = total_bitcoin / block_count
    avg_txcount = total_txcount / block_count
    return {"avg_bitcoin": avg_bitcoin, "avg_txcount": avg_txcount, "total_bitcoin": total_bitcoin, "total_txcount": total_txcount}
+
 
 def get_stored_hash(cursor, height):
    cursor.execute("SELECT hash FROM block_info where height = {}".format(int(height)))
@@ -131,6 +160,6 @@ def _overwrite_blocks(bitcoin_client, config, connection, cursor, start, end):
       sql_command = "INSERT INTO block_info (height, hash, networkhashps, bitcoin, txcount)\nVALUES ({}, \"{}\", {}, {}, {});".format(height, hash, networkhashps, bitcoin, txcount)
       cursor.execute(sql_command)
 
-      if height % 10 == 0:
+      if height % 100 == 0:
          print("Adding Block: {}".format(height)) 
          connection.commit()

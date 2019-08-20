@@ -1,5 +1,5 @@
 import sqlite3
-from lib import price_history
+from lib import price_history, reorg
 
 
 def _add_status(statuses, previous_info, info):
@@ -63,8 +63,8 @@ def get_daily_summary(previous_info, info, spent_utxo):
    statuses.append("")
    
    # Transaction Stats
-   statuses.append("Txcount per block: {:,}  Per day: {:,}".format(info.avg_txcount, info.total_txcount))
-   statuses.append("Bitcoin per block: {:,}  Per day: {:,}".format(info.avg_bitcoin, info.total_bitcoin))
+   statuses.append("Txcount per block: {:,}  Past day: {:,}".format(info.avg_txcount, info.total_txcount))
+   statuses.append("Bitcoin per block: {:,}  Past day: {:,}".format(info.avg_bitcoin, info.total_bitcoin))
    statuses.append("")
    
    # Add Historical Prices
@@ -73,6 +73,15 @@ def get_daily_summary(previous_info, info, spent_utxo):
    
    for price_str in historical_prices:
       statuses.append(price_str)
+
+   statuses.append("")
+   
+   # Add Historical Hashrates
+   historical_hashrates = reorg.get_historical_hashrates(info.blocks)
+   statuses.append("{} Years of Historical Hashrates:".format(len(historical_hashrates)))
+   
+   for hashrate_str in historical_hashrates:
+      statuses.append(hashrate_str)
 
    statuses.append("")
    
