@@ -32,7 +32,7 @@ def get_info(config, previous_info):
    if previous_info != None:
       info.new_blocks = info.blocks - previous_info.blocks
       
-   last_block_time = datetime.fromtimestamp(bitcoin_client.get_blockstats(info.blocks, "time"))
+   last_block_time = datetime.fromtimestamp(bitcoin_client.get_one_blockstat(info.blocks, "time"))
    block_time_delta = datetime.now() - last_block_time
    info.num_minutes = round(block_time_delta.total_seconds() / 60)
    
@@ -103,8 +103,8 @@ def get_average_block_time(bitcoin_client, end_block, depth):
    if start_block < 0:
       return 0
 
-   end_time = datetime.fromtimestamp(bitcoin_client.get_blockstats(end_block, "mediantime"))
-   start_time = datetime.fromtimestamp(bitcoin_client.get_blockstats(start_block, "mediantime"))
+   end_time = datetime.fromtimestamp(bitcoin_client.get_one_blockstat(end_block, "mediantime"))
+   start_time = datetime.fromtimestamp(bitcoin_client.get_one_blockstat(start_block, "mediantime"))
    
    return (end_time - start_time).total_seconds() / depth / 60
    

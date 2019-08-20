@@ -24,19 +24,15 @@ class BitcoinAPIClient:
 
       self.client = AuthServiceProxy(address)
 
-
    def get_current_hash(self, height):
       return self.client.getblockhash(height)
       
-
    def get_num_blocks(self):
       return self.client.getblockcount()
-      
       
    def get_num_headers(self):
       blockchain_info = self.client.getblockchaininfo()
       return blockchain_info["headers"]
-
 
    def get_mining_info(self):
       return self.client.getmininginfo()
@@ -47,13 +43,14 @@ class BitcoinAPIClient:
       else:
          return self.client.getnetworkhashps(num_blocks)
       
-      
-   def get_blockstats(self, block_height, stat):
+   def get_one_blockstat(self, block_height, stat):
+      return self.get_blockstats(block_height, [stat])[stat]
+         
+   def get_blockstats(self, block_height, stats):
       if block_height < 0:
          raise RuntimeError("Negative block height requested {}".format(block_height))
 
-      block_stats = self.client.getblockstats(block_height, [stat])
-      return block_stats[stat]
+      return self.client.getblockstats(block_height, stats)
       
    def get_transaction(self, transaction_id):
       raw_tx = self.client.getrawtransaction(transaction_id)
