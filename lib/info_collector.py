@@ -67,6 +67,14 @@ def get_info(config, previous_info):
    last_matching_height = reorg_info["last_matching_height"]
    
    info.reorg_length = highest_stored_block - last_matching_height
+   
+   # Transaction Stats
+   day_ago_height = info.blocks - BLOCKS_PER_DAY
+   tx_averages = reorg.get_avg_block_info(day_ago_height, info.blocks)
+   info.avg_bitcoin = int(tx_averages["avg_bitcoin"])
+   info.avg_txcount = int(tx_averages["avg_txcount"])
+   info.total_bitcoin = int(tx_averages["total_bitcoin"])
+   info.total_txcount = int(tx_averages["total_txcount"])
 
    # Current Price
    priceResponse = requests.get("https://api.cryptowat.ch/markets/gdax/btcusd/price")

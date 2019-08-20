@@ -38,7 +38,32 @@ def get_min_hashrate(start_height, end_height):
       return -1
    else:
       return result[0]
+      
 
+def get_avg_block_info(start_height, end_height):
+   connection = sqlite3.connect("bitcoin.db")
+   cursor = connection.cursor()
+
+   sql_command = "SELECT bitcoin, txcount FROM block_info WHERE height > {} and height < {}".format(start_height, end_height)
+   cursor.execute(sql_command)
+
+   total_bitcoin = 0
+   total_txcount = 0
+
+   result = cursor.fetchone()
+   while result:
+      total_bitcoin += result[0]
+      total_txcount += result[1]
+      
+      result = cursor.fetchone()
+
+   connection.commit()
+   connection.close()
+
+   block_count = end_height - start_height
+   avg_bitcoin = total_bitcoin / block_count
+   avg_txcount = total_txcount / block_count
+   return {"avg_bitcoin": avg_bitcoin, "avg_txcount": avg_txcount, "total_bitcoin": total_bitcoin, "total_txcount": total_txcount}
 
 def get_stored_hash(cursor, height):
    cursor.execute("SELECT hash FROM block_info where height = {}".format(int(height)))

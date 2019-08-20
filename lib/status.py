@@ -62,6 +62,11 @@ def get_daily_summary(previous_info, info, spent_utxo):
    statuses.append("Lowest Recent Hash Rate: {}".format(min_hashrate_str))
    statuses.append("")
    
+   # Transaction Stats
+   statuses.append("Txcount per block: {:,}  Per day: {:,}".format(info.avg_txcount, info.total_txcount))
+   statuses.append("Bitcoin per block: {:,}  Per day: {:,}".format(info.avg_bitcoin, info.total_bitcoin))
+   statuses.append("")
+   
    # Add Historical Prices
    historical_prices = price_history.get_all_historical_prices(info.price)
    statuses.append("{} Years of Historical Prices:".format(len(historical_prices)))
