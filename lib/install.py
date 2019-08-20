@@ -15,7 +15,8 @@ def install():
    open REAL NOT NULL,
    high REAL NOT NULL,
    low REAL NOT NULL,
-   close REAL NOT NULL);"""
+   close REAL NOT NULL
+   );"""
 
    cursor.execute(sql_command)
 
@@ -25,7 +26,9 @@ def install():
    CREATE TABLE block_info (
    height INTEGER PRIMARY KEY,
    hash TEXT NOT NULL,
-   networkhashps REAL NOT NULL
+   networkhashps REAL NOT NULL,
+   bitcoin REAL NOT NULL,
+   txcount INTEGER NOT NULL
    );"""
 
    cursor.execute(sql_command)
@@ -38,7 +41,8 @@ def install():
    blocks INTEGER NOT NULL,
    difficulty REAL NOT NULL,
    network_hash_rate REAL NOT NULL,
-   price REAL NOT NULL);"""
+   price REAL NOT NULL
+   );"""
 
    cursor.execute(sql_command)
 
@@ -50,7 +54,8 @@ def install():
    vout INTEGER NOT NULL,
    height INTEGER NOT NULL,
    bitcoin REAL NOT NULL,
-   UNIQUE (txid, vout));"""
+   UNIQUE (txid, vout)
+   );"""
 
    cursor.execute(sql_command)
 

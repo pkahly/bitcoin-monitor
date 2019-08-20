@@ -2,6 +2,8 @@ import sqlite3
 import json
 from lib import config_reader
 
+SATOSHIS_PER_BITCOIN = 100000000.0 # 100 million
+
 def get_highest_stored_block(cursor):
    cursor.execute("SELECT height FROM block_info ORDER BY height DESC limit 1")
    result = cursor.fetchone()
@@ -77,16 +79,9 @@ def add_blocks(config, bitcoin_client):
 
 
    # Store hashes of new blocks
-   for height in reversed(range(last_matching_height + 1, num_blocks + 1)):
-      hash = bitcoin_client.get_current_hash(height)
-      networkhashps = bitcoin_client.get_network_hashrate(config.network_hash_duration, height)
-      
-      sql_command = "INSERT INTO block_info (height, hash, networkhashps)\nVALUES ({}, \"{}\", {});".format(height, hash, networkhashps)
-      cursor.execute(sql_command)
-      
-      if height % 100 == 0:
-         print("Adding Block: {}".format(height))
-         connection.commit()
+   start = last_matching_height + 1
+   end = num_blocks + 1
+   _overwrite_blocks(bitcoin_client, config, connection, cursor, start, end)
 
 
    # Commit and Close
@@ -94,3 +89,23 @@ def add_blocks(config, bitcoin_client):
    connection.close()
    
    return {"highest_stored_block": highest_stored_block, "num_blocks": num_blocks, "last_matching_height": last_matching_height}
+   
+
+def _overwrite_blocks(bitcoin_client, config, connection, cursor, start, end):
+   stats = ["blockhash", "total_out", "txs"]
+   
+   for height in reversed(range(start, end)):
+      current_stats = bitcoin_client.get_blockstats(height, stats)
+      networkhashps = bitcoin_client.get_network_hashrate(config.network_hash_duration, height)
+      
+      hash = current_stats["blockhash"]
+      satoshis = current_stats["total_out"]
+      bitcoin = satoshis / SATOSHIS_PER_BITCOIN
+      txcount = current_stats["txs"]
+      
+      sql_command = "INSERT INTO block_info (height, hash, networkhashps, bitcoin, txcount)\nVALUES ({}, \"{}\", {}, {}, {});".format(height, hash, networkhashps, bitcoin, txcount)
+      cursor.execute(sql_command)
+
+      if height % 10 == 0:
+         print("Adding Block: {}".format(height)) 
+         connection.commit()
