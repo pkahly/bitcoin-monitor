@@ -57,7 +57,7 @@ def _run_with_exponential_backoff(config, alertgen):
       except Exception as ex:
          print(ex)
          try:
-            email.send_email("Bitcoin Monitor Has Crashed", str(ex))
+            email.send_email(config, "Bitcoin Monitor Has Crashed", str(ex))
          except:
             print("Failed to send crash report")
 
