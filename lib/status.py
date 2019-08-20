@@ -63,27 +63,12 @@ def get_daily_summary(previous_info, info, spent_utxo):
    statuses.append("")
    
    # Add Historical Prices
-   # TODO move to function
-   connection = sqlite3.connect("bitcoin.db")
-   cursor = connection.cursor()
+   historical_prices = price_history.get_all_historical_prices(info.price)
+   statuses.append("{} Years of Historical Prices:".format(len(historical_prices)))
    
-   statuses.append("Historical Prices:")
-   
-   for years_ago in range(1, 50):
-      history_info = price_history.get_historical_price(cursor, years_ago)
-      if history_info == None:
-         break
-      
-      old_date_str = history_info[0]
-      old_price = history_info[1]
+   for price_str in historical_prices:
+      statuses.append(price_str)
 
-      old_price_str = "${:,.2f}".format(old_price)
-      price_percent_change = price_history.percent_change(old_price, info.price)
-      
-      statuses.append("{} : {:>10} {:>10.2f} %".format(old_date_str, old_price_str, price_percent_change))
-
-   connection.close()
-   
    statuses.append("")
    
    # Check watchlist for spent UTXO

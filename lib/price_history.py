@@ -35,6 +35,27 @@ def to_human_readable_large_number(number, word_dict):
    number = round(number, 2)
    word = word_dict[num_commas]
    return "{} {}".format(number, word)
+   
+def get_all_historical_prices(current_price):
+   connection = sqlite3.connect("bitcoin.db")
+   cursor = connection.cursor()
+   
+   prices = []
+   for years_ago in range(1, 50):
+      history_info = get_historical_price(cursor, years_ago)
+      if history_info == None:
+         break
+      
+      old_date_str = history_info[0]
+      old_price = history_info[1]
+
+      old_price_str = "${:,.2f}".format(old_price)
+      price_percent_change = percent_change(old_price, current_price)
+      
+      prices.append("{} : {:>10} {:>10.2f} %".format(old_date_str, old_price_str, price_percent_change))
+
+   connection.close()
+   return prices
 
 def get_historical_price(cursor, years_ago):
    old_date = datetime.now()
