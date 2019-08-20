@@ -48,7 +48,7 @@ def get_historical_hashrates(height):
    connection = sqlite3.connect("bitcoin.db")
    cursor = connection.cursor()
    
-   year = datetime.now().year()
+   year = datetime.now().year
    while height > 0:
       height -= BLOCKS_PER_YEAR
       year -= 1
