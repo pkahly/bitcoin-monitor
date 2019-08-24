@@ -3,8 +3,8 @@
 from statistics import mean
 from lib import bitcoin_node_api, config_reader
 
-START_BLOCK = 591456
-END_BLOCK = 591556
+START_BLOCK = 591540
+END_BLOCK = 591550
 NUM_RESULTS = 10
 
 config = config_reader.load_config()
@@ -48,5 +48,6 @@ while height <= END_BLOCK:
    height += 1
    
 # Print results
+print("Largest {} transactions from {} to {}".format(NUM_RESULTS, START_BLOCK, END_BLOCK))
 for tx in transactions:
    print("{}  {:>10,}".format(tx["txid"], tx["value"]))
