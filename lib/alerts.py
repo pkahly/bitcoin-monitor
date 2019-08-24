@@ -9,6 +9,8 @@ class AlertType(Enum):
    BLOCK_TIME = 3
    REORG = 4
    PRICE = 5
+   BANLIST = 6
+   SOFTFORKS = 7
 
 class AlertGenerator:
 
@@ -76,5 +78,11 @@ class AlertGenerator:
          
       if abs(info.price_percent_change) > self.config.price_percent_change_threshold:
          alert_data[AlertType.PRICE] = "Price change of {:.2f} %".format(info.price_percent_change)
+         
+      if previous_info.banlist_hash != info.banlist_hash:
+         alert_data[AlertType.BANLIST] = "Banlist has changed: {}".format(info.banlist)
+         
+      if previous_info.softforks_hash != info.softforks_hash:
+         alert_data[AlertType.SOFTFORKS] = "Softforks have changed: {}".format(info.softforks)
       
       return alert_data
