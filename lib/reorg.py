@@ -61,7 +61,7 @@ def get_historical_hashrates(height):
       else:
          hashrate = result[0]
          hashrate_str = price_history.to_human_readable_large_number(hashrate, price_history.HASHES_WORD_DICT)
-         historical_hashrates.append("{} : {}".format(year, hashrate_str))
+         historical_hashrates.append("{:>5} : {:>15}".format(year, hashrate_str))
       
    connection.close()
    return historical_hashrates
