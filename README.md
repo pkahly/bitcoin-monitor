@@ -84,6 +84,13 @@ Historical Prices:
 - See the provided bitcoin.conf file for a sample configuration
 
 #### Install sqlite3 and python-bitcoinrpc
+```
+# Install Pip for Python3 if you don't have it
+sudo apt install python3-pip
+
+pip3 install python-bitcoinrpc
+pip3 install plotly
+```
 
 #### Install the alerter. This will create a database of block info.
 ```
