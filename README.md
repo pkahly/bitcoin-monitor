@@ -129,7 +129,6 @@ I retrieved Mt. Gox data from https://bitcoincharts.com/charts/mtgoxUSD and rece
 "use_testnet": false, 
 "use_regtest": false, 
 "status_frequency_in_hours": 6, 
-"historical_price_filename": "daily_history.csv", 
 "catch_errors": true, 
 "block_reorg_threshold": 0, 
 "minutes_between_blocks_threshold": 90, 
