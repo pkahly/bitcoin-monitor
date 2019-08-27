@@ -1,6 +1,7 @@
 import sqlite3
 import json
 import requests
+import hashlib
 from datetime import datetime
 from lib import reorg, price_history, bitcoin_node_api, config_reader
 
@@ -68,6 +69,16 @@ def get_info(config, previous_info):
    
    info.reorg_length = highest_stored_block - last_matching_height
    
+   # Banned Nodes
+   info.banlist = bitcoin_client.get_banned_nodes()
+   banlist_bytes = str(info.banlist).encode()
+   info.banlist_hash = hashlib.sha256(banlist_bytes).hexdigest()
+   
+   # Softforks
+   info.softforks = bitcoin_client.get_softforks()
+   softforks_bytes = str(info.softforks).encode()
+   info.softforks_hash = hashlib.sha256(softforks_bytes).hexdigest()
+   
    # Transaction Stats
    day_ago_height = info.blocks - BLOCKS_PER_DAY
    tx_averages = reorg.get_avg_block_info(day_ago_height, info.blocks)
@@ -121,7 +132,7 @@ def get_most_recent_info():
    connection = sqlite3.connect("bitcoin.db")
    
    cursor = connection.cursor()
-   cursor.execute("SELECT timestamp, blocks, difficulty, network_hash_rate, price FROM status_info ORDER BY timestamp DESC limit 1")
+   cursor.execute("SELECT timestamp, blocks, difficulty, network_hash_rate, price, banlist_hash, softforks_hash FROM status_info ORDER BY timestamp DESC limit 1")
    
    return _info_from_query_result(cursor.fetchone())
    
@@ -131,7 +142,7 @@ def get_closest_info_to_timestamp(timestamp):
    connection = sqlite3.connect("bitcoin.db")
    
    cursor = connection.cursor()
-   cursor.execute("SELECT timestamp, blocks, difficulty, network_hash_rate, price FROM status_info ORDER BY ABS( timestamp - {} ) ASC limit 1".format(int(timestamp)))
+   cursor.execute("SELECT timestamp, blocks, difficulty, network_hash_rate, price, banlist_hash, softforks_hash FROM status_info ORDER BY ABS( timestamp - {} ) ASC limit 1".format(int(timestamp)))
    
    return _info_from_query_result(cursor.fetchone())
    
@@ -146,6 +157,8 @@ def _info_from_query_result(result):
    info.difficulty = result[2]
    info.network_hash_rate = result[3]
    info.price = result[4]
+   info.banlist_hash = result[5]
+   info.softforks_hash = result[6]
    return info
 
 def write_info(info):
@@ -154,7 +167,7 @@ def write_info(info):
    
    timestamp = int(datetime.timestamp(info.status_time)) # truncate the microsecond portion
 
-   sql_command = "INSERT INTO status_info (timestamp, blocks, difficulty, network_hash_rate, price)\nVALUES ({}, {}, {}, {}, {});".format(timestamp, info.blocks, info.difficulty, info.network_hash_rate, info.price)
+   sql_command = "INSERT INTO status_info (timestamp, blocks, difficulty, network_hash_rate, price, banlist_hash, softforks_hash)\nVALUES ({}, {}, {}, {}, {}, \"{}\", \"{}\");".format(timestamp, info.blocks, info.difficulty, info.network_hash_rate, info.price, info.banlist_hash, info.softforks_hash)
    cursor.execute(sql_command)
 
    connection.commit()

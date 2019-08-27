@@ -78,6 +78,18 @@ class TestAlerts(unittest.TestCase):
       alert_list = self.alertgen.get_alerts(self.previous_info, self.info)
       self.assertTrue('Block Reorg of 1 blocks has occurred' in alert_list)
       
+   def test_banlist_change(self):
+      self.info.banlist = ["banned"]
+      self.info.banlist_hash = "2"
+      alert_list = self.alertgen.get_alerts(self.previous_info, self.info)
+      self.assertTrue("Banlist has changed: ['banned']" in alert_list)
+   
+   def test_softforks_change(self):
+      self.info.softforks = ["forks"]
+      self.info.softforks_hash = "2"
+      alert_list = self.alertgen.get_alerts(self.previous_info, self.info)
+      self.assertTrue("Softforks have changed: ['forks']" in alert_list)
+      
    def _get_default_info(self):
       info = info_collector.Info()
       info.num_minutes = 0
@@ -87,4 +99,6 @@ class TestAlerts(unittest.TestCase):
       info.price_percent_change = 0
       info.network_hash_rate = 10
       info.daily_avg = 10
+      info.banlist_hash = "1"
+      info.softforks_hash = "1"
       return info

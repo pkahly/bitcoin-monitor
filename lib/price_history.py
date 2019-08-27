@@ -52,7 +52,7 @@ def get_all_historical_prices(current_price):
       old_price_str = "${:,.2f}".format(old_price)
       price_percent_change = percent_change(old_price, current_price)
       
-      prices.append("{} : {:>10} {:>10.2f} %".format(old_date_str, old_price_str, price_percent_change))
+      prices.append("{} : {:>15} {:>15.2f} %".format(old_date_str, old_price_str, price_percent_change))
 
    connection.close()
    return prices

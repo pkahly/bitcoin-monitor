@@ -41,7 +41,9 @@ def install():
    blocks INTEGER NOT NULL,
    difficulty REAL NOT NULL,
    network_hash_rate REAL NOT NULL,
-   price REAL NOT NULL
+   price REAL NOT NULL,
+   banlist_hash TEXT NOT NULL,
+   softforks_hash TEXT NOT NULL
    );"""
 
    cursor.execute(sql_command)

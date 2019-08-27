@@ -84,6 +84,13 @@ Historical Prices:
 - See the provided bitcoin.conf file for a sample configuration
 
 #### Install sqlite3 and python-bitcoinrpc
+```
+# Install Pip for Python3 if you don't have it
+sudo apt install python3-pip
+
+pip3 install python-bitcoinrpc
+pip3 install plotly
+```
 
 #### Install the alerter. This will create a database of block info.
 ```
@@ -122,7 +129,6 @@ I retrieved Mt. Gox data from https://bitcoincharts.com/charts/mtgoxUSD and rece
 "use_testnet": false, 
 "use_regtest": false, 
 "status_frequency_in_hours": 6, 
-"historical_price_filename": "daily_history.csv", 
 "catch_errors": true, 
 "block_reorg_threshold": 0, 
 "minutes_between_blocks_threshold": 90, 

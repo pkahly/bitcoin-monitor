@@ -67,3 +67,10 @@ class BitcoinAPIClient:
       
    def get_utxo(self, tx_id, vout):
       return self.client.gettxout(tx_id, vout)
+      
+   def get_banned_nodes(self):
+      return self.client.listbanned()
+      
+   def get_softforks(self):
+      blockchain_info = self.client.getblockchaininfo()
+      return [blockchain_info["softforks"], blockchain_info["bip9_softforks"]]

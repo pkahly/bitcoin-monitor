@@ -1,16 +1,14 @@
 #!/usr/bin/python3
 
-import time
-from statistics import mean
-from lib import bitcoin_node_api
+from statistics import mean, median
+from lib import bitcoin_node_api, config_reader
 
+config = config_reader.load_config()
+client = bitcoin_node_api.BitcoinAPIClient(config)
 
-client = bitcoin_node_api.BitcoinAPIClient()
+height = client.get_num_blocks()
 
-max_height = client.get_num_blocks()
-height = 1
-
-while height <= max_height:
+while height > 0:
    current_block = client.get_block(height)
    current_block_time = current_block["mediantime"]
    tx_list = current_block["tx"]
@@ -37,8 +35,10 @@ while height <= max_height:
 
    if tx_ages:
       average_age = mean(tx_ages)
+      median_age = median(tx_ages)
    else:
       average_age = 0
    
    print("Average TX Age: {:.0f}".format(average_age))
-   height += 1
+   print("Median TX Age: {:.0f}".format(median_age))
+   height -= 1
