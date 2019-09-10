@@ -54,6 +54,8 @@ def _run_with_exponential_backoff(config, alertgen):
       try:
          _run(config, alertgen)
          error_sleep = INITIAL_ERROR_SLEEP
+      except info_collector.VerifyingBlocks as ex:
+         print(ex)
       except Exception as ex:
          print(ex)
          try:

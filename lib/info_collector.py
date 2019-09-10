@@ -18,6 +18,9 @@ class Info:
    def __init__(self):
       self.status_time = datetime.now()
 
+class VerifyingBlocks(RuntimeError):
+   pass
+
 
 def get_info(config, previous_info):
    info = Info()
@@ -27,7 +30,7 @@ def get_info(config, previous_info):
    info.blocks = bitcoin_client.get_num_blocks()
    headers = bitcoin_client.get_num_headers()
    if info.blocks != headers:
-      raise RuntimeError("Verifying Blocks: {} / {}".format(info.blocks, headers))
+      raise VerifyingBlocks("Verifying Blocks: {} / {}".format(info.blocks, headers))
 
    info.new_blocks = info.blocks
    if previous_info != None:
