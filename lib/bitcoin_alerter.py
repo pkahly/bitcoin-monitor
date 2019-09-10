@@ -1,4 +1,4 @@
-import time
+import time, traceback
 from datetime import datetime, timedelta
 from lib import info_collector, email, status, alerts, time_tools, watchlist
 
@@ -55,13 +55,19 @@ def _run_with_exponential_backoff(config, alertgen):
          _run(config, alertgen)
          error_sleep = INITIAL_ERROR_SLEEP
       except info_collector.VerifyingBlocks as ex:
+         # If we are still verifying blocks, print the progress
+         # Do not send a crash report or print the stack trace
          print(ex)
       except Exception as ex:
-         print(ex)
+         # Print stack trace
+         traceback.print_exc()
+         
+         # Attempt to send a crash report
          try:
-            email.send_email(config, "Bitcoin Monitor Has Crashed", str(ex))
+            email.send_email(config, "Bitcoin Monitor Has Crashed", traceback.format_exc())
          except:
             print("Failed to send crash report")
+            traceback.print_exc()
 
       hours, minutes, seconds = time_tools.seconds_to_hms(error_sleep)
       print("Retry in {}:{}".format(hours, minutes))
