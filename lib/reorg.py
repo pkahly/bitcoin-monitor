@@ -48,10 +48,8 @@ def get_historical_hashrates(height):
    connection = sqlite3.connect("bitcoin.db")
    cursor = connection.cursor()
    
-   year = datetime.now().year
    while height > 0:
       height -= BLOCKS_PER_YEAR
-      year -= 1
 
       cursor.execute("SELECT networkhashps FROM block_info WHERE height = {}".format(int(height)))
       result = cursor.fetchone()
@@ -61,7 +59,7 @@ def get_historical_hashrates(height):
       else:
          hashrate = result[0]
          hashrate_str = price_history.to_human_readable_large_number(hashrate, price_history.HASHES_WORD_DICT)
-         historical_hashrates.append("{:>5} : {:>15}".format(year, hashrate_str))
+         historical_hashrates.append("{:>8} : {:>15}".format(height, hashrate_str))
       
    connection.close()
    return historical_hashrates

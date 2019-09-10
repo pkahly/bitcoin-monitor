@@ -78,7 +78,7 @@ def get_daily_summary(previous_info, info, spent_utxo):
    
    # Add Historical Hashrates
    historical_hashrates = reorg.get_historical_hashrates(info.blocks)
-   statuses.append("{} Years of Historical Hashrates:".format(len(historical_hashrates)))
+   statuses.append("Historical Hashrates:")
    
    for hashrate_str in historical_hashrates:
       statuses.append(hashrate_str)
