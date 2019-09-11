@@ -1,5 +1,5 @@
-bitcoin.db
-bitcoin.db-journal
+*.db
+*.db-journal
 config.json
 *.csv
 *__pycache__
