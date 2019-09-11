@@ -22,7 +22,7 @@ class BitcoinAPIClient:
 
       address = BITCOIND_ADDRESS_TEMPLATE.format(config.bitcoind_user, config.bitcoind_pass, port)
 
-      self.client = AuthServiceProxy(address)
+      self.client = AuthServiceProxy(address, timeout=240)
 
    def get_current_hash(self, height):
       return self.client.getblockhash(height)
