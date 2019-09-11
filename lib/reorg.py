@@ -145,9 +145,14 @@ def add_blocks(config, bitcoin_client):
 def _overwrite_blocks(bitcoin_client, config, connection, cursor, start, end):
    stats = ["blockhash", "total_out", "txs"]
    
-   for height in reversed(range(start, end)):
+   count = 0
+   for height in range(start, end):
       current_stats = bitcoin_client.get_blockstats(height, stats)
-      networkhashps = bitcoin_client.get_network_hashrate(config.network_hash_duration, height)
+      
+      try:
+         networkhashps = bitcoin_client.get_network_hashrate(config.network_hash_duration, height)
+      except Exception as ex:
+         raise RuntimeError("Failed to get network hashrate at block {}".format(height), ex)
       
       hash = current_stats["blockhash"]
       satoshis = current_stats["total_out"]
@@ -156,7 +161,8 @@ def _overwrite_blocks(bitcoin_client, config, connection, cursor, start, end):
       
       sql_command = "INSERT INTO block_info (height, hash, networkhashps, bitcoin, txcount)\nVALUES ({}, \"{}\", {}, {}, {});".format(height, hash, networkhashps, bitcoin, txcount)
       cursor.execute(sql_command)
+      count += 1
 
-      if height % 100 == 0:
-         print("Adding Block: {}".format(height)) 
+      if count % 100 == 0:
+         print("Adding blocks up to: {}".format(height))
          connection.commit()
