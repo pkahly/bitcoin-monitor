@@ -91,6 +91,7 @@ sudo apt install python3-pip
 pip3 install python-bitcoinrpc
 pip3 install plotly
 ```
+Note: There is a known bug in python-bitcoinrpc which may cause errors when retrieving the network hashrate. https://github.com/jgarzik/python-bitcoinrpc/pull/63
 
 #### Install the alerter. This will create a database of block info.
 ```
