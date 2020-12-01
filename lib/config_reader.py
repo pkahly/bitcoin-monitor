@@ -47,7 +47,7 @@ def _write_config_if_missing():
       with open(CONFIG_FILE, 'w') as json_file:
          json_file.write(config_str)
       
-      print("Created default config.json")
+      logging.info("Created default config.json")
 
 
 def _read_config():

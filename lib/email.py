@@ -19,6 +19,6 @@ def send_email(config, subject, message):
       server.sendmail(config.bot_email, config.human_email, email_text)
       server.quit()
 
-   print("\n\n###################################\n")
-   print(email_text)
-   print()
+   logging.info("\n\n###################################\n")
+   logging.info(email_text)
+   logging.info("\n")

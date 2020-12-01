@@ -73,4 +73,4 @@ class BitcoinAPIClient:
       
    def get_softforks(self):
       blockchain_info = self.client.getblockchaininfo()
-      return [blockchain_info["softforks"], blockchain_info["bip9_softforks"]]
+      return blockchain_info["softforks"]

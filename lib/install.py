@@ -65,7 +65,7 @@ def install():
    # Commit and Close
    connection.commit()
    connection.close()
-   print("Install completed successfully")
+   logging.info("Install completed successfully")
 
 
 def add_blocks(config):
@@ -76,13 +76,13 @@ def add_blocks(config):
    num_blocks = reorg_info["num_blocks"]
    last_matching_height = reorg_info["last_matching_height"]
 
-   print("Highest Stored Block: {}".format(highest_stored_block))
-   print("Newest Block: {}".format(num_blocks))
+   logging.info("Highest Stored Block: {}".format(highest_stored_block))
+   logging.info("Newest Block: {}".format(num_blocks))
 
    if last_matching_height != highest_stored_block:
-      print("WARNING! Reorg occurred after block {}".format(last_matching_height))
+      logging.info("WARNING! Reorg occurred after block {}".format(last_matching_height))
 
-   print("Added {} blocks to database".format(num_blocks - last_matching_height))
+   logging.info("Added {} blocks to database".format(num_blocks - last_matching_height))
 
 
 
@@ -93,13 +93,13 @@ def import_historical_prices(filename):
    with open(filename, 'r') as file:
       # Remove heading
       heading = file.readline().rstrip()
-      print("Ignored CSV Heading: {}".format(heading))
+      logging.info("Ignored CSV Heading: {}".format(heading))
       
       # Autodetect date format
       line = _peek_line(file)
       date_str = line[0:line.index(',')]
       date_format = _get_date_format(date_str)
-      print("Autodetected Date Format as: {}".format(date_format))
+      logging.info("Autodetected Date Format as: {}".format(date_format))
       
       # Import
       num_lines = 0
@@ -117,7 +117,7 @@ def import_historical_prices(filename):
             low = float(line_split[3])
             close = float(line_split[4])
          except:
-            print("Skipping Invalid Line: {}".format(line))
+            logging.error("Skipping Invalid Line: {}".format(line))
 
          try:
             sql_command = "INSERT INTO historical_prices (date, timestamp, open, high, low, close)\nVALUES (\"{}\", {}, {}, {}, {}, {});".format(date_str, timestamp, open_price, high, low, close)
@@ -130,7 +130,7 @@ def import_historical_prices(filename):
    # Commit and Close
    connection.commit()
    connection.close()
-   print("Added {} historical price points to database".format(num_lines))
+   logging.info("Added {} historical price points to database".format(num_lines))
    
    
 def uninstall():
@@ -145,7 +145,7 @@ def uninstall():
    # Commit and Close
    connection.commit()
    connection.close()
-   print("Uninstall completed successfully")
+   logging.info("Uninstall completed successfully")
    
 
 def _get_date_format(date_str):

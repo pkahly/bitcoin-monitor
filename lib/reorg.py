@@ -111,7 +111,7 @@ def get_last_matching_height(bitcoin_client, cursor, height):
 def delete_rows_after(connection, cursor, height):
    cursor.execute("DELETE FROM block_info where height > {}".format(int(height)))
    connection.commit()
-   print("Deleted block info after {}".format(height))
+   logging.info("Deleted block info after {}".format(height))
    
    
 def add_blocks(config, bitcoin_client):
@@ -164,5 +164,5 @@ def _overwrite_blocks(bitcoin_client, config, connection, cursor, start, end):
       count += 1
 
       if count % 100 == 0:
-         print("Adding blocks up to: {}".format(height))
+         logging.info("Adding blocks up to: {}".format(height))
          connection.commit()

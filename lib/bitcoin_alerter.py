@@ -26,7 +26,7 @@ def _run(config, alertgen):
       if previous_info == None:
          # Write info and sleep
          info_collector.write_info(info)
-         print("Initialized status table. Sleep {} seconds".format(SECONDS_TO_SLEEP))
+         logging.info("Initialized status table. Sleep {} seconds".format(SECONDS_TO_SLEEP))
          
       elif len(alert_list) > 0:
          # Send alerts
@@ -42,7 +42,7 @@ def _run(config, alertgen):
       else:
          td = timedelta(hours=config.status_frequency_in_hours) - (datetime.now() - previous_info.status_time)
          hours, minutes, seconds = time_tools.seconds_to_hms(td.seconds)
-         print("No alerts. Next status email in: {}:{}:{}".format(hours, minutes, seconds))
+         logging.info("No alerts. Next status email in: {}:{}:{}".format(hours, minutes, seconds))
       
       # Sleep
       time.sleep(SECONDS_TO_SLEEP)
@@ -57,20 +57,22 @@ def _run_with_exponential_backoff(config, alertgen):
       except info_collector.VerifyingBlocks as ex:
          # If we are still verifying blocks, print the progress
          # Do not send a crash report or print the stack trace
-         print(ex)
+         logging.info(ex)
       except Exception as ex:
          # Print stack trace
-         traceback.print_exc()
+         #traceback.print_exc()
+         logging.error(ex)
          
          # Attempt to send a crash report
          try:
             email.send_email(config, "Bitcoin Monitor Has Crashed", traceback.format_exc())
-         except:
-            print("Failed to send crash report")
-            traceback.print_exc()
+         except as ex:
+            logging.error("Failed to send crash report")
+            #traceback.print_exc()
+            logging.error(ex)
 
       hours, minutes, seconds = time_tools.seconds_to_hms(error_sleep)
-      print("Retry in {}:{}".format(hours, minutes))
+      logging.info("Retry in {}:{}".format(hours, minutes))
       
       time.sleep(error_sleep)
       error_sleep = min(error_sleep * 2, MAX_ERROR_SLEEP)
@@ -92,7 +94,7 @@ def send_status(config, previous_info, info):
 def send_daily_summary(config):
    previous_info = info_collector.get_closest_info_to_timestamp(time_tools.get_timestamp_hours_ago(24, datetime.now()))
    if previous_info == None:
-      print("No saved info, cannot send daily summary")
+      logging.info("No saved info, cannot send daily summary")
       return
    
    info = info_collector.get_info(config, previous_info)

@@ -2,8 +2,22 @@
 
 import argparse
 from lib import bitcoin_alerter, install, debug, watchlist, config_reader
+import logging
+import sys
+
+## Set Up File and STDOUT Logging
+logging.root.handlers = []
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s   %(message)s",
+    handlers=[
+        logging.FileHandler("bitcoin-monitor.log", mode='a'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
 
 
+## Argument Parsing ##
 parser = argparse.ArgumentParser(description='Tools for sending status and alerts for a full Bitcoin node')
 
 parser.add_argument('--run',

@@ -33,7 +33,7 @@ def add_old_utxo(block_height_threshold):
    connection.commit()
    connection.close()
    
-   print("Added {} UTXO to Watchlist".format(count))
+   logging.info("Added {} UTXO to Watchlist".format(count))
 
 
 def check_watchlist(config):
@@ -56,14 +56,14 @@ def check_watchlist(config):
        current_utxo = client.get_utxo(txid, vout)
        if not current_utxo:
          info = info = {"txid": txid, "vout": vout, "height": height, "bitcoin": bitcoin}
-         print(info)
+         logging.info(info)
          spent_utxo.append(info)
        
        result = cursor.fetchone()
        count += 1
    
    connection.close()
-   print("Checked all {} UTXO from watchlist".format(count))
+   logging.info("Checked all {} UTXO from watchlist".format(count))
 
    return spent_utxo
 
@@ -94,4 +94,4 @@ def clear_watchlist():
    # Commit and Close
    connection.commit()
    connection.close()
-   print("Watchlist cleared successfully")
+   logging.info("Watchlist cleared successfully")
