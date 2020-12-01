@@ -1,5 +1,6 @@
 from bitcoinrpc.authproxy import AuthServiceProxy
 from lib import config_reader
+import logging
 
 # Had luck running bitcoind with -rpcuser=alerterbot -rpcpassword=DO_NOT_USE_76cf8e3a30fb29b4131a8babb -rpcbind=127.0.0.1:8332 -rpcallowip=127.0.0.1
 

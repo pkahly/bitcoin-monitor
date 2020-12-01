@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
 import plotly.graph_objects as go
-from lib import price_history
 from datetime import datetime
+from lib import price_history
 
 
 USE_LOG_SCALE = True

@@ -2,6 +2,7 @@ import sqlite3
 import json
 from datetime import datetime
 from lib import config_reader, price_history
+import logging
 
 SATOSHIS_PER_BITCOIN = 100000000.0 # 100 million
 BLOCKS_PER_YEAR = 52560 # 144 * 365

@@ -1,5 +1,6 @@
 import sqlite3
 import time
+import logging
 
 
 def print_blocks():

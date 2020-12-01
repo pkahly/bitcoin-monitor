@@ -1,5 +1,6 @@
 import sqlite3
 from datetime import datetime
+import logging
 
 NUMBER_WORD_DICT = {
    0: "",

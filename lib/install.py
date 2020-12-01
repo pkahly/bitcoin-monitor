@@ -1,6 +1,7 @@
 import sqlite3
 from datetime import datetime
 from lib import reorg, price_history, bitcoin_node_api
+import logging
 
 
 def install():

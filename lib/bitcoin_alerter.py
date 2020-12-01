@@ -1,6 +1,7 @@
 import time, traceback
 from datetime import datetime, timedelta
 from lib import info_collector, email, status, alerts, time_tools, watchlist
+import logging
 
 SECONDS_TO_SLEEP = 600 # 10 minutes
 INITIAL_ERROR_SLEEP = 600 # 10 minutes
@@ -66,7 +67,7 @@ def _run_with_exponential_backoff(config, alertgen):
          # Attempt to send a crash report
          try:
             email.send_email(config, "Bitcoin Monitor Has Crashed", traceback.format_exc())
-         except as ex:
+         except Exception as ex:
             logging.error("Failed to send crash report")
             #traceback.print_exc()
             logging.error(ex)

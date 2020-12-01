@@ -1,3 +1,4 @@
+import logging
 
 # Provides an iterator to read UTXO info from a CSV file
 # This file can be generated using a variety of tools

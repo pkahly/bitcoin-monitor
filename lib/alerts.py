@@ -1,6 +1,7 @@
 from enum import Enum
 from datetime import datetime, timedelta
 from lib import config_reader, price_history
+import logging
 
 class AlertType(Enum):
    NO_BLOCKS_IN_MINS = 0

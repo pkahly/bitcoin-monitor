@@ -3,4 +3,5 @@
 config.json
 *.csv
 *__pycache__
+bitcoin-monitor.log
 

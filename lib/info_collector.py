@@ -4,6 +4,7 @@ import requests
 import hashlib
 from datetime import datetime
 from lib import reorg, price_history, bitcoin_node_api, config_reader
+import logging
 
 
 HALVING_RATE = 210000 # mining reward halves after this many blocks

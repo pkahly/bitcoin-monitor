@@ -1,5 +1,6 @@
 import smtplib
 from datetime import datetime
+import logging
 
 
 def send_email(config, subject, message):

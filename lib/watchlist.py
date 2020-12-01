@@ -1,5 +1,6 @@
 import sqlite3
 from lib import utxo_reader, bitcoin_node_api
+import logging
 
 SATOSHIS_PER_BITCOIN = 100000000.0 # 100 million
 AMOUNT_THRESHOLD = 0.1

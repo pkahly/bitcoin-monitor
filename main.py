@@ -9,7 +9,7 @@ import sys
 logging.root.handlers = []
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s   %(message)s",
+    format="%(asctime)s \t  %(message)s",
     handlers=[
         logging.FileHandler("bitcoin-monitor.log", mode='a'),
         logging.StreamHandler(sys.stdout)

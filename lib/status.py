@@ -1,5 +1,6 @@
 import sqlite3
 from lib import price_history, reorg
+import logging
 
 
 def _add_status(statuses, previous_info, info):

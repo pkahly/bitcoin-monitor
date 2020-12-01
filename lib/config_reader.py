@@ -1,5 +1,6 @@
 import json
 import os
+import logging
 
 
 CONFIG_FILE = 'config.json'
